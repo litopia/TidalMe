@@ -6,7 +6,7 @@ set :user, "tommy"
 
 
 set :scm, :git
-set :repository, "git@github.com:themooingpig/testapplication1.git"
+set :repository, "git@github.com:themooingpig/TidalMe.git"
 set :branch, "master"
 set :use_sudo, true
 
