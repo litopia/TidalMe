@@ -9,7 +9,7 @@ set :scm, :git
 set :repository, "git@github.com:themooingpig/TidalMe.git"
 set :branch, "master"
 set :use_sudo, true
-set :deploy_subdir, "server/testapplication1"
+set :deploy_subdir, "Server/TestProject1"
 
 
 server "tidal1.cloudapp.net", :web, :app, :db, primary: true
