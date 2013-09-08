@@ -1,6 +1,6 @@
 require "bundler/capistrano"
 
-set :bundle_flags, "--no-deployment --quiet"
+#set :bundle_flags, "--no-deployment --quiet"
 set :application, "testapplication1"
 set :user, "tommy"
 
