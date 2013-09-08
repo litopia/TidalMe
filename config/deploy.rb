@@ -1,21 +1,14 @@
-set :bundle_cmd, "/home/tommy/.rvm/gems/ruby-2.0.0-p247@global/bin/bundle"
-set :bundle_dir, "/home/tommy/.rvm/gems/ruby-2.0.0-p247"
+require "bundler/capistrano"
+
 set :bundle_flags, "--no-deployment --quiet"
-
-#require "bundler/capistrano"
-
 set :application, "testapplication1"
 set :user, "tommy"
 
 
 set :scm, :git
-set :repository, "git@github.com:themooingpig/TidalMe.git"
+set :repository, "git@github.com:themooingpig/tidalme.git"
 set :branch, "master"
 set :use_sudo, true
-#set :deploy_subdir, "Server/TestProject1"
-
-set :deploy_via, "remote_cache_with_project_root"
-set :project_root, "Server/TestProject1"
 
 
 server "tidal1.cloudapp.net", :web, :app, :db, primary: true
@@ -23,7 +16,7 @@ server "tidal1.cloudapp.net", :web, :app, :db, primary: true
 
 set :deploy_to, "/home/#{user}/apps/#{application}"
 default_run_options[:pty] = true
-#ssh_options[:forward_agent] = true
+ssh_options[:forward_agent] = true
 ssh_options[:port] = 22
 
 
