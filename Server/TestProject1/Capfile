@@ -10,7 +10,7 @@ class RemoteCacheSubdir < Capistrano::Deploy::Strategy::RemoteCache
 
   private
 
-  def repository_cache_subdir
+  def repository_cache_subdir2
     if configuration[:deploy_subdir] then
       File.join(repository_cache, configuration[:deploy_subdir])
     else
@@ -21,10 +21,10 @@ class RemoteCacheSubdir < Capistrano::Deploy::Strategy::RemoteCache
   def copy_repository_cache
     logger.trace "copying the cached version to #{configuration[:release_path]}"
     if copy_exclude.empty? 
-      run "cp -RPp #{repository_cache_subdir} #{configuration[:release_path]} && #{mark}"
+      run "cp -RPp #{repository_cache_subdir2} #{configuration[:release_path]} && #{mark}"
     else
       exclusions = copy_exclude.map { |e| "--exclude=\"#{e}\"" }.join(' ')
-      run "rsync -lrpt #{exclusions} #{repository_cache_subdir}/* #{configuration[:release_path]} && #{mark}"
+      run "rsync -lrpt #{exclusions} #{repository_cache_subdir2}/* #{configuration[:release_path]} && #{mark}"
     end
   end
 
