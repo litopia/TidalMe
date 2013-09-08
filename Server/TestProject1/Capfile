@@ -1,9 +1,3 @@
-load 'deploy'
-# Uncomment if you are using Rails' asset pipeline
-    load 'deploy/assets'
-load 'config/deploy' # remove this line to skip loading any of the default tasks
-
-
 require 'capistrano/recipes/deploy/strategy/remote_cache'
 
 class RemoteCacheSubdir < Capistrano::Deploy::Strategy::RemoteCache
@@ -32,3 +26,9 @@ end
 
 
 set :strategy, RemoteCacheSubdir.new(self)
+
+
+load 'deploy'
+# Uncomment if you are using Rails' asset pipeline
+    load 'deploy/assets'
+load 'config/deploy' # remove this line to skip loading any of the default tasks
