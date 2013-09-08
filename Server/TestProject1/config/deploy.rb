@@ -1,3 +1,4 @@
+source /home/tommy/.rvm/environments/ruby-2.0.0-p247
 set :bundle_cmd, "/home/tommy/.rvm/gems/ruby-2.0.0-p247@global/bin/bundle"
 set :bundle_dir, "/home/tommy/.rvm/gems/ruby-2.0.0-p247"
 set :bundle_flags, "--no-deployment --quiet"
