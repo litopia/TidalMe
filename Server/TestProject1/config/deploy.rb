@@ -1,5 +1,5 @@
-set :bundle_cmd, "/home/deployment/.rvm/gems/ruby-2.0.0-p247@global/bin/bundle"
-set :bundle_dir, "/home/deployment/.rvm/gems/ruby-2.0.0-p247"
+set :bundle_cmd, "/home/tommy/.rvm/gems/ruby-2.0.0-p247@global/bin/bundle"
+set :bundle_dir, "/home/tommy/.rvm/gems/ruby-2.0.0-p247"
 set :bundle_flags, "--no-deployment --quiet"
 
 require "bundler/capistrano"
