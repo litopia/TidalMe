@@ -12,13 +12,9 @@ body {
   margin: 0;
   padding: 0;
 }
-
 a * {
   cursor: pointer;
 }
-
-/* Styles for body */
-
 .locationSelector {
   float: right;
 }
@@ -48,19 +44,37 @@ a * {
 #ranking-box ul li {
   padding: 15px 0;
   background-color: #ef5816;
-  height: 93px;
-  overflow: hidden;
-  color: #fefefe;
 }
 #ranking-box ul li:hover {
   cursor: pointer;
 }
-
-#ranking-box ul li span:nth-child(2){
-	height: 63px;
-	overflow: hidden;
+#ranking-box ul li:nth-child(2) {
+  opacity: 0.92;
 }
-
+#ranking-box ul li:nth-child(3) {
+  opacity: 0.84;
+}
+#ranking-box ul li:nth-child(4) {
+  opacity: 0.76;
+}
+#ranking-box ul li:nth-child(5) {
+  opacity: 0.68;
+}
+#ranking-box ul li:nth-child(6) {
+  opacity: 0.60;
+}
+#ranking-box ul li:nth-child(7) {
+  opacity: 0.52;
+}
+#ranking-box ul li:nth-child(8) {
+  opacity: 0.44;
+}
+#ranking-box ul li:nth-child(9) {
+  opacity: 0.32;
+}
+#ranking-box ul li:nth-child(10) {
+  opacity: 0.28;
+}
 #ranking-box ul .gradient-2 {
   opacity: 0.92;
 }
@@ -88,6 +102,13 @@ a * {
 #ranking-box ul .gradient-10 {
   opacity: 0.28;
 }
+#ranking-box a {
+  color: #fefefe;
+}
+#ranking-box a:hover {
+  text-decoration: none;
+  color: #fefefe;
+}
 #ranking-box .rank {
   text-align: center;
 }
@@ -99,65 +120,4 @@ a * {
   margin: 8px 0 0 0;
   font-size: 0.8em;
   opacity: 0.8;
-}
-
-/* Style for the updating content box*/
-#content-box ul{
-	padding: 0;
-	list-style-type: none;	
-}
-#content-box .tweet-box li{
-	border-bottom: 1px solid rgba(0,0,0,0.1);	
-	padding: 7px 0;
-}
-
-#content-box .tweet-box li img{
-	padding-left:0;
-	margin-top: 4px;
-	border-radius: 3px;
-	-webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-}
-
-#content-box .tweet-box li span{
-	padding-left: 0;	
-	padding-right: 0;
-}
-
-#content-box .tweet-box .user-name{
-	font-weight: bold;
-	margin-right: 5px;
-}
-
-#content-box .tweet-box .twitter-id{
-	color: #666;
-	font-size: 0.95em;
-}
-
-#content-box .tweet-box .tweet{
-	font-size: 0.9em;
-	color: #333;
-}
-
-#content-box .tweet-box p{
-	margin-bottom: 0;
-}
-
-#content-box .img-box li{
-	padding: 0;
-	overflow: hidden;
-	margin-bottom: 7px;
-}
-
-#content-box .img-box img{
-	width: 100%;
-}
-
-footer{
-	width: 100%;
-	clear: both;	
-}
-
-@media only screen and (min-width: 768px) {
-   
 }
