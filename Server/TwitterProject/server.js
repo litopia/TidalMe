@@ -223,6 +223,7 @@ app.use(require('./middleware/errorHandler')(errorOptions));
 
 require('./routes/home')(app);
 require('./routes/account')(app);
+require('./routes/data')(app);
 
 // Global Routes - this should be last!
 require('./routes/global')(app);
