@@ -44,36 +44,16 @@ a * {
 #ranking-box ul li {
   padding: 15px 0;
   background-color: #ef5816;
+  color: #fefefe;
+  height: 93px;
+  overflow: hidden;
+}
+#ranking-box ul li span {
+  height: 63px;
+  overflow: hidden;
 }
 #ranking-box ul li:hover {
   cursor: pointer;
-}
-#ranking-box ul li:nth-child(2) {
-  opacity: 0.92;
-}
-#ranking-box ul li:nth-child(3) {
-  opacity: 0.84;
-}
-#ranking-box ul li:nth-child(4) {
-  opacity: 0.76;
-}
-#ranking-box ul li:nth-child(5) {
-  opacity: 0.68;
-}
-#ranking-box ul li:nth-child(6) {
-  opacity: 0.60;
-}
-#ranking-box ul li:nth-child(7) {
-  opacity: 0.52;
-}
-#ranking-box ul li:nth-child(8) {
-  opacity: 0.44;
-}
-#ranking-box ul li:nth-child(9) {
-  opacity: 0.32;
-}
-#ranking-box ul li:nth-child(10) {
-  opacity: 0.28;
 }
 #ranking-box ul .gradient-2 {
   opacity: 0.92;
@@ -111,13 +91,52 @@ a * {
 }
 #ranking-box .rank {
   text-align: center;
+  padding-top: 20px;
+  overflow: hidden;
 }
 #ranking-box h3,
 #ranking-box h4 {
   margin: 0;
 }
 #ranking-box p {
-  margin: 8px 0 0 0;
+  margin: 4px 0 0 0;
   font-size: 0.8em;
   opacity: 0.8;
+}
+#content-box .update-box ul {
+  padding: 0;
+  list-style-type: none;
+}
+#content-box .update-box li {
+  padding: 0;
+}
+#content-box .update-box .tweet-box img {
+  padding-left: 0;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+#content-box .update-box .tweet-box li {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 10px 0 15px;
+}
+#content-box .update-box .tweet-box p {
+  margin: 0;
+}
+#content-box .update-box .tweet-box span {
+  padding: 0;
+}
+#content-box .update-box .tweet-box .user-name {
+  font-weight: bold;
+}
+#content-box .update-box .tweet-box .twitter-id {
+  font-size: 0.9em;
+  color: rgba(0, 0, 0, 0.7);
+}
+#content-box .update-box .img-box img {
+  width: 100%;
+}
+#content-box .update-box .img-box li {
+  margin-bottom: 7px;
+  overflow: hidden;
 }

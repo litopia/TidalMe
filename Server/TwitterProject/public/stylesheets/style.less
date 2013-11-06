@@ -57,6 +57,15 @@ a * {
       li{
         padding: 15px 0;
         background-color: @orange;
+		color: #fefefe;
+		height: 93px;
+		overflow: hidden;
+		
+		//set the height of the hashbox with content to 63px 
+		span{
+			height: 63px;
+			overflow: hidden;
+		}
       }
       
       li:hover{
@@ -88,12 +97,61 @@ a * {
       text-decoration: none;
       color: #fefefe;}
     
-    .rank{ text-align: center;}
+    .rank{ 
+		text-align: center;
+		padding-top: 20px;
+		overflow: hidden;}
     
     h3, h4{margin: 0;}
     p{
-      margin: 8px 0 0 0;
+      margin: 4px 0 0 0;
       font-size: 0.8em;
       opacity: 0.8;}
 }
 
+#content-box{
+	.update-box{
+		ul{
+			padding: 0;
+      		list-style-type: none;
+		}
+		li{
+			padding: 0;
+		}
+		.tweet-box{
+			img{
+				padding-left: 0;
+				-webkit-border-radius: 3px;
+				-moz-border-radius: 3px;
+				border-radius: 3px;
+			}
+			li{
+				border-bottom: 1px solid rgba(0,0,0,0.1);
+				padding: 10px 0 15px;
+			}
+			
+			p{
+				margin: 0;
+			}
+			span{
+				padding: 0;
+			}
+			.user-name{
+				font-weight: bold;
+			}
+			.twitter-id{
+				font-size: 0.9em;
+				color: rgba(0,0,0,0.7);
+			}
+		}
+		.img-box{
+			img{
+				width: 100%;
+			}
+			li{
+				margin-bottom: 7px;
+				overflow: hidden;
+			}
+		}
+	}
+}
