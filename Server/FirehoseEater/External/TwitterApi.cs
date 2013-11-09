@@ -42,4 +42,15 @@ namespace TwitterApiSalty
         [ScriptName("access_token_secret")]
         public string AccessTokenSecret;
     }
+
+    public class Tweet
+    {
+        [ScriptName("created_at")]
+        public DateTime CreateDate;
+
+        public DateTime TidalServerDate;
+
+        public string Text;
+        public string Lang;
+    }
 }

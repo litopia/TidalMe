@@ -1,10 +1,8 @@
 ﻿using FirehoseEater;
 using NodeJS;
-using NodeJS.FSModule;
 using NodeJS.HttpModule;
 using System;
 using System.Collections.Generic;
-using System.Html;
 using System.Linq;
 using System.Serialization;
 using System.Text.RegularExpressions;
@@ -13,10 +11,12 @@ using TwitterApiSalty;
 
 class Program
 {
+#if !TEST
     static Program()
     {
         Main();
     }
+#endif
 
     static Connection m_Connection;
     static async void Main()
@@ -25,20 +25,20 @@ class Program
 
         m_Connection = await GetSqlConnection();
 
-        TwitterFirehose.Instance.NewTweets += Instance_NewTweets;
+        Globals.SetInterval(ProcessTweetData, 50 * 1000);  // Every 50s
     }
-    
-    static void LoadFiles()
+
+    public static void LoadFiles()
     {
         FileLoader.GetLinq();
         //FileLoader.GetSql();
     }
 
-    static async Task<Connection> GetSqlConnection()
+    internal static async Task<Connection> GetSqlConnection()
     {
         TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
 
-        Sql sql = SqlServerFactory.Get();
+        Sql sql = SqlServerFactory.Instance;
 
         //const string connStr = "Driver={SQL Server Native Client 10.0};Server=tcp:z9cfcadmwg.database.windows.net,1433;Database=TidalMe;Uid=tommy@z9cfcadmwg;Pwd={your_password_here};Encrypt=yes;Connection Timeout=30;";
         var config = new SqlConfiguration()
@@ -63,11 +63,6 @@ class Program
             }
 
             tcs.SetResult(err);
-
-            //var request = connection.Request();
-            //request.Query("select 1 as number", delegate(object error, object recordSet) {
-            //    Console.Info(Json.Stringify(recordSet));
-            //});
         });
 
         await tcs.Task;
@@ -75,8 +70,42 @@ class Program
         return connection;
     }
 
-    static void Instance_NewTweets(object arg)
+    static void ProcessTweetData()
     {
-        
+        KeyValuePair<DateTime, Dictionary<string, int>> aggregation = TwitterFirehoseAggregator.Instance.GetAvailableAggregation();
+
+        if (aggregation == null)
+        {
+            return;
+        }
+
+        NodeJS.Console.Info("**************************************Sending *****");
+
+        foreach (KeyValuePair<string, int> valKVP in aggregation.Value)
+        {
+            Request request = m_Connection.Request();
+            request.Input("Date", SqlServerFactory.Instance.DateTime, aggregation.Key);
+            request.Input("HashTag", SqlServerFactory.Instance.NVarChar, valKVP.Key);
+            request.Input("Count", SqlServerFactory.Instance.Int, valKVP.Value);
+            request.Execute("InsertRawTrendingData", delegate(object err, object recordsets, object returnValue)
+            {
+                if (!Script.IsNullOrUndefined(err))
+                {
+                    NodeJS.Console.Info("err = " + err);
+                }
+            });
+        }
+
+
+        TwitterFirehoseAggregator.Instance.DeleteAggregateForMinute(aggregation.Key);
+    }
+
+    static void Dummy()
+    {
+        Http.CreateServer((req, res) =>
+        {
+            res.Write("Hello, world");
+            res.End();
+        }).Listen(8000);
     }
 }
