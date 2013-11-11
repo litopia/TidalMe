@@ -4,10 +4,10 @@ html
     - if (typeof(title) == 'undefined')
         title Express Starter Template
     - else 
-        title= title
+        title Tidal.Me | Twitter Trends in a Glance
     
     // include default stylesheets and any view stylesheets
-    link(rel='stylesheet', href=base + '/stylesheets/style.css')
+    link(rel='stylesheet', href=base + '/stylesheets/style.min.css')
     link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css')
     
     block stylesheets
@@ -16,15 +16,17 @@ html
     script(src='//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js')
     script(src='//d3js.org/d3.v3.min.js')
     script(src='/javascripts/tidal.js')
+    script(src='/javascripts/ui.js')
 
   body   
-    header(class='page-header')
-      a
-        h1(class='pageTitle') Tidal.Me
+    header(class='page-header clearfix')
+      h1(class='pageTitle') 
+        a(href="#") Tidal.Me
+          //img(src= base+'/images/logo-fish.gif')
       div(class="locationSelector btn-group")
         button(type="button" class="btn btn-danger") World
         button(type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown")
-          span(class="glyphicon glyphicon-plus")
+          span(class="glyphicon glyphicon-align-justify")
         ul(class="dropdown-menu" role="menu")
           li
             a(href="#") US
@@ -32,9 +34,11 @@ html
             a(href="#") China
           li
             a(href="#") England
+          li
+            a(href="#") Add a Location
           li(class="divider")
           li
-            a(href="#") Action Prime
+            a(href="#") Login with Twitter
         
     // #body!= body ?don't know what does it mean
     block content
