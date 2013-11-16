@@ -38,12 +38,31 @@ a * {
 }
 
 .page-header{
-    padding-left: 22px;
-    padding-right: 22px;
-}
-
-.pageTitle{
-    display: inline;
+    padding: 9px 22px;
+    border-bottom: none;
+    margin: 0 !important;
+    -webkit-box-shadow:  0px 3px 5px 3px rgba(0, 0, 0, 0.2);
+    box-shadow:  0px 3px 5px 3px rgba(0, 0, 0, 0.2);
+    z-index: -1;
+    //background-image: url("/images/header.png");
+    
+    
+    .pageTitle{
+        display: inline;
+        a{
+            color: #333;
+        }
+    }
+    
+    .dropdown-menu{
+        right: 0;
+        left: auto;
+    }
+    
+    .dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus{
+        background-color: @orange;
+        opacity: 0.84; //3rd color in the spectrum 
+    }
 }
 
 //Ranking box is for the top 10 trends on Twitter.
@@ -53,26 +72,30 @@ a * {
     ul{
       padding: 0;
       list-style-type: none;
+      margin-bottom: 0;
       
       li{
         padding: 15px 0;
         background-color: @orange;
-		color: #fefefe;
-		height: 93px;
-		overflow: hidden;
-		
-		//set the height of the hashbox with content to 63px 
-		span{
-			height: 63px;
-			overflow: hidden;
-		}
+        color: #fefefe;
+        height: 93px;
+        overflow: hidden;
+        
+        //set the height of the hashbox with content to 63px 
+        span{
+            height: 63px;
+            overflow: hidden;
+        }
       }
       
-      li:hover{
-        cursor: pointer;
-      }
-      
+	  .active{
+	  	background-image: url("/images/bg.png");
+        background-repeat: no-repeat;
+        background-position: right;
+	  }
       li:nth-child(2){opacity: 0.92;}
+	  //li:nth-child(2):hover{opacity: 0.87;}
+	  
       li:nth-child(3){opacity: 0.84;}
       li:nth-child(4){opacity: 0.76;}
       li:nth-child(5){opacity: 0.68;}
@@ -81,15 +104,10 @@ a * {
       li:nth-child(8){opacity: 0.44;}
       li:nth-child(9){opacity: 0.32;}
       li:nth-child(10){opacity: 0.28;}
-      .gradient-2{opacity: 0.92;}
-      .gradient-3{opacity: 0.84;}
-      .gradient-4{opacity: 0.76;} 
-      .gradient-5{opacity: 0.68;}
-      .gradient-6{opacity: 0.60;}
-      .gradient-7{opacity: 0.52;}
-      .gradient-8{opacity: 0.44;}
-      .gradient-9{opacity: 0.32;}
-      .gradient-10{opacity: 0.28;}
+	  li:hover{
+        cursor: pointer;
+		background-color: #00A28E;
+      }
     }
     
     a{color: #fefefe;}
@@ -97,10 +115,10 @@ a * {
       text-decoration: none;
       color: #fefefe;}
     
-    .rank{ 
-		text-align: center;
-		padding-top: 20px;
-		overflow: hidden;}
+    .testrank{ 
+        text-align: center;
+        padding-top: 20px;
+        overflow: hidden;}
     
     h3, h4{margin: 0;}
     p{
@@ -110,48 +128,146 @@ a * {
 }
 
 #content-box{
-	.update-box{
-		ul{
-			padding: 0;
-      		list-style-type: none;
-		}
-		li{
-			padding: 0;
-		}
-		.tweet-box{
-			img{
-				padding-left: 0;
-				-webkit-border-radius: 3px;
-				-moz-border-radius: 3px;
-				border-radius: 3px;
-			}
-			li{
-				border-bottom: 1px solid rgba(0,0,0,0.1);
-				padding: 10px 0 15px;
-			}
-			
-			p{
-				margin: 0;
-			}
-			span{
-				padding: 0;
-			}
-			.user-name{
-				font-weight: bold;
-			}
-			.twitter-id{
-				font-size: 0.9em;
-				color: rgba(0,0,0,0.7);
-			}
-		}
-		.img-box{
-			img{
-				width: 100%;
-			}
-			li{
-				margin-bottom: 7px;
-				overflow: hidden;
-			}
-		}
+    border-top: 1px solid @orange;
+    border-bottom: 1px solid @orange;
+    height: 930px;
+    overflow: hidden;
+    @media(max-width:768px){
+            display: none;
+    }
+	.expend-botton{
+		text-align: center;
+		color: rgba(0,0,0,0.7);
+		font-size: 0.9em;
+		cursor:pointer;
+		padding-top: 5px;
+		line-height: 0.9em;
 	}
+    .expend-botton:hover{
+        background-color: rgba(red(@orange), green(@orange), blue(@orange), 0.1);
+    }
+    .update-box{
+        h3{
+            margin: 15px 0 5px;
+            color: @orange;
+        }
+        .subtitle{
+            color: @orange;
+            opacity: 0.6;
+        }
+        button{
+            float: right;
+        }
+        .btn-danger{
+            background-color: @orange;
+            border-color: @orange;
+            opacity: 0.84; //3rd color in the spectrum
+        }
+    
+        .btn-danger:hover{
+            background-color: @orange;
+            opacity: 1;
+        }
+        ul{
+            padding: 0;
+              list-style-type: none;
+        }
+        li{
+            padding: 0;
+            cursor: pointer;
+        }
+        li:hover{
+            background-color: #fafafa;
+        }
+        .tweet-box{
+            height: auto;
+            
+            img{
+                padding-left: 0;
+                -webkit-border-radius: 3px;
+                -moz-border-radius: 3px;
+                border-radius: 3px;
+            }
+            li{
+                border-bottom: 1px solid rgba(0,0,0,0.1);
+                padding: 10px 0 15px;
+            }
+            
+            p{
+                margin: 0;
+            }
+            span{
+                padding: 0;
+            }
+            .user-name{
+                font-weight: bold;
+            }
+            .twitter-id{
+                font-size: 0.9em;
+                color: rgba(0,0,0,0.7);
+            }
+        }
+        .img-box{
+            .divider{
+                border-top: 1px solid;
+                margin-bottom: 10px;
+            }
+            img{
+                width: 100%;
+            }
+            li{
+                margin-bottom: 7px;
+                overflow: hidden;
+            }
+        }
+    }
+    .analysis-box{
+        border-left: 1px solid rgba(0,0,0,0.1);
+		height: 930px;
+        @media(max-width: 992px){
+            display: none;
+        }
+        
+        .timeline-area{
+             border-bottom: 1px solid rgba(0,0,0,0.1);
+             padding-bottom: 15px;
+             button{
+                 color: @orange;
+                margin-bottom: 15px;
+                padding-left: 0;
+             }
+             img{
+                width: 100%;
+             }
+            .glyphicon{
+                padding: 15px 0 0 5px;
+            }
+            h4{
+                margin-bottom: 0px;
+            }
+        }
+        .heatmap-area{
+            padding-top: 15px;
+            padding-bottom: 15px;
+            img{width: 100%; opacity: 0.8;}
+        }
+    }
+}
+
+footer{
+    clear: both;
+    //background-image: url("/images/header.png");
+    margin: 0;
+}
+
+//for interaction 
+.default{
+	li:nth-child(n+5){
+		display: none;
+	}
+}
+.show{
+	overflow-y: scroll;
+	height: 800px;
+	transition:height 2s;
 }

@@ -1,16 +1,20 @@
 extends layout
 block content
-    div(id="body" class="clearfix")
+    div(id="body")
         div(id="ranking-box" class="col-xs-12 col-sm-5 col-lg-4")
           ul
         div(id="content-box" class="col-xs-11 col-sm-7 col-lg-8")
-          div(class="update-box col-lg-6")
-                h3 World Cup
-                p 
-                    span 10456 
-                    | People Talked About It
+          div(class="update-box clearfix col-sm-12 col-lg-6")
+               div(class="update-header")
+                  button(type="button" class="btn btn-danger btn-sm")    
+                     span(class="glyphicon glyphicon-stats") 
+                  h3 World Cup
+                  p(class="subtitle") 
+                    span 
+                      b 10456 
+                      | People Talked About It!
                 div(class="tweet-box")
-                  ul
+                  ul(id="tweet-list" class="default")
                     li(class="clearfix") 
                       img(class="col-xs-2" src=base + '/images/profile.png')
                       span(class="col-xs-10")
@@ -36,22 +40,71 @@ block content
                       img(class="col-xs-2" src=base + '/images/profile.png')
                       span(class="col-xs-10")
                         p 
+                          span(class="user-name") tara strong 
+                          span(class="twitter-id") ‏@tarastrong
+                        p(class="tweet") @tarastrong lol I highly doubt Harley's sincerity
+                    li(class="clearfix") 
+                      img(class="col-xs-2" src=base + '/images/profile.png')
+                      span(class="col-xs-10")
+                        p 
                           span(class="user-name") Ben Platt 
                           span(class="twitter-id") ‏@BenSPLATT
                         p(class="tweet") It's traditional to apologize if you've hurt anyone on Yom Kippur. Harley is truly sorry to anyone whose skull or spleen she may have broken
+                    li(class="clearfix") 
+                      img(class="col-xs-2" src=base + '/images/profile.png')
+                      span(class="col-xs-10")
+                        p 
+                          span(class="user-name") Dalia Ezzat 
+                          span(class="twitter-id") ‏@DaliaEzzat
+                        p(class="tweet") Are you sure about that??? I had enough trouble typing out this tweet! Tell Harley curses on her! Grrrr...
+                    li(class="clearfix") 
+                      img(class="col-xs-2" src=base + '/images/profile.png')
+                      span(class="col-xs-10")
+                        p 
+                          span(class="user-name") Ben Platt 
+                          span(class="twitter-id") ‏@BenSPLATT
+                        p(class="tweet") It's traditional to apologize if you've hurt anyone on Yom Kippur. Harley is truly sorry to anyone whose skull or spleen she may have broken
+                    li(class="clearfix") 
+                      img(class="col-xs-2" src=base + '/images/profile.png')
+                      span(class="col-xs-10")
+                        p 
+                          span(class="user-name") Ben Platt 
+                          span(class="twitter-id") ‏@BenSPLATT
+                        p(class="tweet") It's traditional to apologize if you've hurt anyone on Yom Kippur. Harley is truly sorry to anyone whose skull or spleen she may have broken
+                  div(class="expend-botton col-xs-12") 
+                     p Show More Tweets  
+                     p(class="glyphicon glyphicon-chevron-down")
                 div(class="img-box")
+                  div(class="divider")
+                      //div(class="btn-group btn-group-xs")
+                          button(type="button" class="btn btn-default")
+                            span(class="glyphicon glyphicon-remove")
+                          button(type="button" class="btn btn-default") View More Pictures 
+                            span(class="glyphicon glyphicon-chevron-up")
                   ul
-                    li(class="col-xs-4" style="padding-right: 7px")
+                    li(style="padding-right: 7px; width: 33.3%; height: auto; display: inline-block")
                       img(src=base + '/images/img1.jpg')
-                    li(class="col-xs-4" style="padding-right: 7px")
+                    li(style="padding-right: 7px; width: 33.3%; height: auto; display: inline-block")
                       img(src=base + '/images/img2.jpg')
-                    li(class="col-xs-4" style="height: 196px")
+                    li(style="width: 33.3%; height: auto; display: inline-block")
                       img(src=base + '/images/img3.jpg')
                      li(class="col-xs-8" style="padding-right: 7px")
                       img(src=base + '/images/img5.jpg')
                     li(class="col-xs-4" style="height: 178px")
                       img(src=base + '/images/img4.jpg')
+                  div(class="expend-botton col-xs-12") 
+                     p See More Tweets  
+                     p(class="glyphicon glyphicon-chevron-down")
           div(class="analysis-box col-lg-6")
-            p analysis
+            div(class="timeline-area col-lg-12")
+                h4 Trending Data 
+                    span(class="glyphicon glyphicon-stats")
+                button(type="button" class="btn btn-link") 24 hrs
+                button(type="button" class="btn btn-link") All Time
+                img(src=base + '/images/graph.png')
+            div(class="heatmap-area col-lg-12")
+                h4 Heat Map
+                img(src=base + '/images/heatmap.png')
+                
   
               
