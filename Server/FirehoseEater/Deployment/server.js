@@ -76,7 +76,7 @@ var connection1 = new sql.Connection(config, function(err) {
     // Query
 
     var request = new sql.Request(connection1); // or: var request = connection.request();
-    request.query('select 1 as number', function(err, recordset) {
+    request.query("insert Location (WoeId, Country, CountryCode, Name, ParentId, PlaceTypeCode, Url) Values(2, '', '', '', 12, 1, '')", function(err, recordset) {
         console.dir(recordset);
     });
 

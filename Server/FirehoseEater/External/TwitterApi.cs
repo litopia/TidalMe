@@ -53,4 +53,42 @@ namespace TwitterApiSalty
         public string Text;
         public string Lang;
     }
+
+    public class TrendsContainer
+    {
+        [ScriptName("as_of")]
+        public DateTime AsOf;
+
+        [ScriptName("created_at")]
+        public DateTime CreatedAt;
+        public Trend[] Trends;
+    }
+
+    public class Trend
+    {
+        public string Name;
+        public string Url;
+
+        [ScriptName("promoted_content")]
+        public string PromotedContent;
+        public string Query;
+        public string Events;
+    }
+
+    public class TwitterTrendsLocation
+    {
+        public string Name;
+        public TwitterTrendsPlaceType PlaceType;
+        public string Url;
+        public int Parentid;
+        public string Country;
+        public int Woeid;
+        public string CountryCode;
+    }
+
+    public class TwitterTrendsPlaceType
+    {
+        public int Code;
+        public string Name;
+    }
 }
