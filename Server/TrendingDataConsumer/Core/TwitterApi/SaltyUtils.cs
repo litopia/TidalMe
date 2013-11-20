@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SqlApi
+namespace FirehoseEater
 {
     public static class DictionaryExtensions
     {

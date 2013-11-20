@@ -1,8 +1,9 @@
 ﻿'use strict';
 require('mscorlib');
 var http = require('http');
-exports.FirehoseEater = exports.FirehoseEater || {};
-exports.TwitterApiSalty = exports.TwitterApiSalty || {};
+var SqlApi = require('SqlApi');
+var TwitterApi = require('TwitterApi');
+exports.SqlApi = exports.SqlApi || {};
 ss.initAssembly(exports, 'TrendingDataConsumer');
 ////////////////////////////////////////////////////////////////////////////////
 // Program
@@ -26,32 +27,7 @@ $$Program.$main = function() {
 				case 1: {
 					$state = -1;
 					$$Program.$m_Connection = $t1.getResult();
-					//ProcessTweetData();
-					$FirehoseEater_$TwitterTrendsAggregator.get_$instance().add_$onTrendsReady($$Program.$onTrendsReady);
-					//for (int i = 0; i < 20; i++)
-					//{
-					//    NodeJS.Console.Info(i);
-					//    try
-					//    {
-					//        TrendsContainer trendsContainer = await TrendsUtils.GetTrend(creds, 1);
-					//        NodeJS.Console.Info(Json.Stringify(trendsContainer));
-					//        NodeJS.Console.Info("-----------------------");
-					//        NodeJS.Console.Info(Json.Stringify(trendsContainer.Trends[0].Name));
-					//    }
-					//    catch (Exception e)
-					//    {
-					//        if (e.Message == "Too Many Requests" ||
-					//            (e.InnerException != null && e.InnerException.Message == "Too Many Requests"))
-					//        {
-					//            NodeJS.Console.Info("Too Many Requests Exception");
-					//        }
-					//        else
-					//        {
-					//            NodeJS.Console.Info("Regular Exception: " + e.Message);
-					//        }
-					//    }
-					//}
-					//Globals.SetInterval(ProcessTweetData, 50 * 1000);  // Every 50s
+					$SqlApi_$TwitterTrendsAggregator.get_$instance().add_$onTrendsReady($$Program.$onTrendsReady);
 					$state = -1;
 					break $sm1;
 				}
@@ -64,8 +40,6 @@ $$Program.$main = function() {
 	$sm();
 };
 $$Program.$onTrendsReady = function(woeid, trendsContainer) {
-	//NodeJS.Console.Info(String.Format("AsOf{2}  CreatedAt{3}     : woeid ({0})'s first trend is {1}", woeid, String.Join(",", trendsContainer.Trends.Select(trend => trend.Name)), trendsContainer.AsOf, trendsContainer.CreatedAt));
-	//foreach (Trend trend in trendsContainer.Trends)
 	for (var i = 0; i < trendsContainer.trends.length; i++) {
 		var trend = trendsContainer.trends[i];
 		console.info('Inserting ' + trend.name + ' to sql');
@@ -92,13 +66,13 @@ $$Program.$getSqlConnection = function() {
 					case 0: {
 						$state = -1;
 						tcs = new ss.TaskCompletionSource();
-						sql = $TwitterApiSalty_SqlServerFactory.get_instance();
+						sql = SqlApi.SqlApi.SqlServerFactory.get_instance();
 						//const string connStr = "Driver={SQL Server Native Client 10.0};Server=tcp:z9cfcadmwg.database.windows.net,1433;Database=TidalMe;Uid=tommy@z9cfcadmwg;Pwd={your_password_here};Encrypt=yes;Connection Timeout=30;";
-						$t1 = new $SqlConfiguration();
+						$t1 = new SqlApi.SqlConfiguration();
 						$t1.user = 'Tidal1@z9cfcadmwg.database.windows.net';
 						$t1.password = 't1dalw4ve!';
 						$t1.server = 'z9cfcadmwg.database.windows.net';
-						$t2 = new $TwitterApiSalty_Options();
+						$t2 = new SqlApi.SqlApi.Options();
 						$t2.encrypt = true;
 						$t2.database = 'TidalMe';
 						$t1.options = $t2;
@@ -135,7 +109,7 @@ $$Program.$getSqlConnection = function() {
 	return $tcs.task;
 };
 $$Program.$processTweetData = function() {
-	var $t1 = new $TwitterApiSalty_Credentials();
+	var $t1 = new TwitterApi.SqlApi.Credentials();
 	$t1.consumer_key = '5iaBY1vY49ngNJBMy0vw';
 	$t1.consumer_secret = 'bBx36uscbcaY0h7kX9HktfVzty7Vyb7n0FJcEgw8';
 	$t1.access_token_key = '325955870-uePDCtgtivjrOyUnTORwGOXpRlBn3rCC1xAeDOcB';
@@ -164,58 +138,45 @@ var $$TestProgram = function() {
 };
 $$TestProgram.__typeName = '$TestProgram';
 ////////////////////////////////////////////////////////////////////////////////
-// TwitterApiSalty.SqlConfiguration
-var $SqlConfiguration = function() {
-	this.user = null;
-	this.password = null;
-	this.server = null;
-	this.options = null;
-	this['debug.packet'] = false;
-	this['debug.data'] = false;
-	this['debug.payload'] = false;
+// SqlApi.FileLoader
+var $SqlApi_$FileLoader = function() {
 };
-$SqlConfiguration.__typeName = 'SqlConfiguration';
-exports.SqlConfiguration = $SqlConfiguration;
+$SqlApi_$FileLoader.__typeName = 'SqlApi.$FileLoader';
 ////////////////////////////////////////////////////////////////////////////////
-// FirehoseEater.FileLoader
-var $FirehoseEater_$FileLoader = function() {
-};
-$FirehoseEater_$FileLoader.__typeName = 'FirehoseEater.$FileLoader';
-////////////////////////////////////////////////////////////////////////////////
-// FirehoseEater.TwitterLocations
-var $FirehoseEater_$TwitterLocations = function() {
+// SqlApi.TwitterLocations
+var $SqlApi_$TwitterLocations = function() {
 	this.$m_Lock = new Object();
 	this.$m_ValidCredentials = null;
-	this.$m_LocationsRetrievedEvent = new $FirehoseEater_ManualResetEvent();
-	this.$m_ValidCredentials = $FirehoseEater_TrendsUtils.getValidCredentials();
+	this.$m_LocationsRetrievedEvent = new $SqlApi_ManualResetEvent();
+	this.$m_ValidCredentials = TwitterApi.SqlApi.TrendsUtils.getValidCredentials();
 };
-$FirehoseEater_$TwitterLocations.__typeName = 'FirehoseEater.$TwitterLocations';
-$FirehoseEater_$TwitterLocations.get_$instance = function() {
-	return $FirehoseEater_$TwitterLocations.$m_singleton.value();
+$SqlApi_$TwitterLocations.__typeName = 'SqlApi.$TwitterLocations';
+$SqlApi_$TwitterLocations.get_$instance = function() {
+	return $SqlApi_$TwitterLocations.$m_singleton.value();
 };
 ////////////////////////////////////////////////////////////////////////////////
-// FirehoseEater.TwitterTrendsAggregator
-var $FirehoseEater_$TwitterTrendsAggregator = function() {
+// SqlApi.TwitterTrendsAggregator
+var $SqlApi_$TwitterTrendsAggregator = function() {
 	this.$m_Lock = new Object();
 	this.$m_ValidCredentials = null;
 	this.$1$OnTrendsReadyField = null;
-	this.$m_ValidCredentials = $FirehoseEater_TrendsUtils.getValidCredentials();
+	this.$m_ValidCredentials = TwitterApi.SqlApi.TrendsUtils.getValidCredentials();
 	this.$requestTrends();
 	setInterval(ss.mkdel(this, function() {
 		this.$requestTrends();
 	}), 540000);
 	// 9 min
 };
-$FirehoseEater_$TwitterTrendsAggregator.__typeName = 'FirehoseEater.$TwitterTrendsAggregator';
-$FirehoseEater_$TwitterTrendsAggregator.get_$instance = function() {
-	return $FirehoseEater_$TwitterTrendsAggregator.$m_singleton.value();
+$SqlApi_$TwitterTrendsAggregator.__typeName = 'SqlApi.$TwitterTrendsAggregator';
+$SqlApi_$TwitterTrendsAggregator.get_$instance = function() {
+	return $SqlApi_$TwitterTrendsAggregator.$m_singleton.value();
 };
 ////////////////////////////////////////////////////////////////////////////////
-// FirehoseEater.DictionaryExtensions
-var $FirehoseEater_DictionaryExtensions = function() {
+// SqlApi.DictionaryExtensions
+var $SqlApi_DictionaryExtensions = function() {
 };
-$FirehoseEater_DictionaryExtensions.__typeName = 'FirehoseEater.DictionaryExtensions';
-$FirehoseEater_DictionaryExtensions.getOrConstruct = function(Key, Value) {
+$SqlApi_DictionaryExtensions.__typeName = 'SqlApi.DictionaryExtensions';
+$SqlApi_DictionaryExtensions.getOrConstruct = function(Key, Value) {
 	return function(dict, key) {
 		if (dict.containsKey(key)) {
 			return dict.get_item(key);
@@ -225,340 +186,25 @@ $FirehoseEater_DictionaryExtensions.getOrConstruct = function(Key, Value) {
 		return dict.get_item(key);
 	};
 };
-exports.FirehoseEater.DictionaryExtensions = $FirehoseEater_DictionaryExtensions;
+exports.SqlApi.DictionaryExtensions = $SqlApi_DictionaryExtensions;
 ////////////////////////////////////////////////////////////////////////////////
-// FirehoseEater.IReadOnlyResetEvent
-var $FirehoseEater_IReadOnlyResetEvent = function() {
+// SqlApi.IReadOnlyResetEvent
+var $SqlApi_IReadOnlyResetEvent = function() {
 };
-$FirehoseEater_IReadOnlyResetEvent.__typeName = 'FirehoseEater.IReadOnlyResetEvent';
-exports.FirehoseEater.IReadOnlyResetEvent = $FirehoseEater_IReadOnlyResetEvent;
+$SqlApi_IReadOnlyResetEvent.__typeName = 'SqlApi.IReadOnlyResetEvent';
+exports.SqlApi.IReadOnlyResetEvent = $SqlApi_IReadOnlyResetEvent;
 ////////////////////////////////////////////////////////////////////////////////
-// FirehoseEater.ManualResetEvent
-var $FirehoseEater_ManualResetEvent = function() {
+// SqlApi.ManualResetEvent
+var $SqlApi_ManualResetEvent = function() {
 	this.$1$IsSignaledField = false;
 	this.$m_StoredCallbacks = [];
 };
-$FirehoseEater_ManualResetEvent.__typeName = 'FirehoseEater.ManualResetEvent';
-exports.FirehoseEater.ManualResetEvent = $FirehoseEater_ManualResetEvent;
-////////////////////////////////////////////////////////////////////////////////
-// FirehoseEater.SqlUtils
-var $FirehoseEater_SqlUtils = function() {
-};
-$FirehoseEater_SqlUtils.__typeName = 'FirehoseEater.SqlUtils';
-$FirehoseEater_SqlUtils.getSqlConnection = function() {
-	var $state = 0, $tcs = new ss.TaskCompletionSource(), tcs, sql, $t1, $t2, config, connection;
-	var $sm = function() {
-		try {
-			$sm1:
-			for (;;) {
-				switch ($state) {
-					case 0: {
-						$state = -1;
-						tcs = new ss.TaskCompletionSource();
-						sql = $TwitterApiSalty_SqlServerFactory.get_instance();
-						//const string connStr = "Driver={SQL Server Native Client 10.0};Server=tcp:z9cfcadmwg.database.windows.net,1433;Database=TidalMe;Uid=tommy@z9cfcadmwg;Pwd={your_password_here};Encrypt=yes;Connection Timeout=30;";
-						$t1 = new $SqlConfiguration();
-						$t1.user = 'Tidal1@z9cfcadmwg.database.windows.net';
-						$t1.password = 't1dalw4ve!';
-						$t1.server = 'z9cfcadmwg.database.windows.net';
-						$t2 = new $TwitterApiSalty_Options();
-						$t2.encrypt = true;
-						$t2.database = 'TidalMe';
-						$t1.options = $t2;
-						config = $t1;
-						connection = null;
-						connection = new sql.Connection(config, function(err) {
-							if (!ss.isNullOrUndefined(err)) {
-								tcs.setException(new ss.Exception('Error Received: ' + err));
-								return;
-							}
-							tcs.setResult(err);
-						});
-						$state = 1;
-						tcs.task.continueWith($sm);
-						return;
-					}
-					case 1: {
-						$state = -1;
-						tcs.task.getResult();
-						$tcs.setResult(connection);
-						return;
-					}
-					default: {
-						break $sm1;
-					}
-				}
-			}
-		}
-		catch ($t3) {
-			$tcs.setException(ss.Exception.wrap($t3));
-		}
-	};
-	$sm();
-	return $tcs.task;
-};
-exports.FirehoseEater.SqlUtils = $FirehoseEater_SqlUtils;
-////////////////////////////////////////////////////////////////////////////////
-// FirehoseEater.TrendsUtils
-var $FirehoseEater_TrendsUtils = function() {
-};
-$FirehoseEater_TrendsUtils.__typeName = 'FirehoseEater.TrendsUtils';
-$FirehoseEater_TrendsUtils.getTrend = function(creds, woeid) {
-	var $state = 0, $tcs = new ss.TaskCompletionSource(), tcs, twitter, twitterObj, hashTags, beginningTime, options;
-	var $sm = function() {
-		try {
-			$sm1:
-			for (;;) {
-				switch ($state) {
-					case 0: {
-						$state = -1;
-						tcs = new ss.TaskCompletionSource();
-						twitter = require('twitter');
-						twitterObj = new twitter(creds);
-						hashTags = new (ss.makeGenericType(ss.Dictionary$2, [String, ss.Int32]))();
-						beginningTime = new Date();
-						options = {};
-						options['id'] = woeid;
-						twitterObj.get('/trends/place.json', options, function(data) {
-							//NodeJS.Console.Info("Requesting Trend: " + Json.Stringify(data));
-							if (!ss.referenceEquals(ss.getInstanceType(data), Array)) {
-								// error
-								if (!!ss.referenceEquals(data.statusCode, 429)) {
-									tcs.setException(new ss.Exception('Too Many Requests'));
-								}
-								else {
-									tcs.setException(new ss.Exception(data.toString()));
-								}
-								return;
-							}
-							var dataArray = ss.cast(data, Array);
-							var trendsContainer = dataArray[0];
-							tcs.setResult(trendsContainer);
-						});
-						$state = 1;
-						tcs.task.continueWith($sm);
-						return;
-					}
-					case 1: {
-						$state = -1;
-						$tcs.setResult(tcs.task.getResult());
-						return;
-					}
-					default: {
-						break $sm1;
-					}
-				}
-			}
-		}
-		catch ($t1) {
-			$tcs.setException(ss.Exception.wrap($t1));
-		}
-	};
-	$sm();
-	return $tcs.task;
-};
-$FirehoseEater_TrendsUtils.getTrendLocations = function(creds) {
-	var $state = 0, $tcs = new ss.TaskCompletionSource(), tcs, twitter, twitterObj, options;
-	var $sm = function() {
-		try {
-			$sm1:
-			for (;;) {
-				switch ($state) {
-					case 0: {
-						$state = -1;
-						tcs = new ss.TaskCompletionSource();
-						twitter = require('twitter');
-						twitterObj = new twitter(creds);
-						options = {};
-						twitterObj.get('/trends/available.json', options, function(data) {
-							if (!ss.referenceEquals(ss.getInstanceType(data), Array)) {
-								// error
-								if (!!ss.referenceEquals(data.statusCode, 429)) {
-									tcs.setException(new ss.Exception('Too Many Requests'));
-								}
-								else {
-									tcs.setException(new ss.Exception(data.toString()));
-								}
-								return;
-							}
-							var dataArray = ss.cast(data, Array);
-							var trendLocationsContainer = dataArray;
-							tcs.setResult(trendLocationsContainer);
-						});
-						$state = 1;
-						tcs.task.continueWith($sm);
-						return;
-					}
-					case 1: {
-						$state = -1;
-						$tcs.setResult(tcs.task.getResult());
-						return;
-					}
-					default: {
-						break $sm1;
-					}
-				}
-			}
-		}
-		catch ($t1) {
-			$tcs.setException(ss.Exception.wrap($t1));
-		}
-	};
-	$sm();
-	return $tcs.task;
-};
-$FirehoseEater_TrendsUtils.getValidCredentials = function() {
-	var $t1 = [];
-	var $t2 = new $TwitterApiSalty_Credentials();
-	$t2.consumer_key = '5iaBY1vY49ngNJBMy0vw';
-	$t2.consumer_secret = 'bBx36uscbcaY0h7kX9HktfVzty7Vyb7n0FJcEgw8';
-	$t2.access_token_key = '325955870-uePDCtgtivjrOyUnTORwGOXpRlBn3rCC1xAeDOcB';
-	$t2.access_token_secret = 'Emv6SBI8Yevn5MhiBIsjvJ8Ub5G6lOrU3UylRUoqMgaev';
-	ss.add($t1, $t2);
-	null;
-	var $t3 = new $TwitterApiSalty_Credentials();
-	$t3.consumer_key = 'SCRBMIoNmWZS9Aqo2tNg';
-	$t3.consumer_secret = 'yIXVi2hLqrnRWjFvyRHRgGw5u2XFpJgucT8O7yYFTI';
-	$t3.access_token_key = '325955870-7ttUlmgwjgwvRVILUO7aOZ3K65EPJH3El9bpCyqA';
-	$t3.access_token_secret = 'YtHHt9xI0ikCG0hwq5HzHAg2t6bF64q4MsESqE6Us';
-	ss.add($t1, $t3);
-	null;
-	var $t4 = new $TwitterApiSalty_Credentials();
-	$t4.consumer_key = 'P5KR6e8ZxKiY87XQQAd39Q';
-	$t4.consumer_secret = 'esh2cw3vfs5kvaNNCeWjx7IVAX7si6z85rlZfmSY';
-	$t4.access_token_key = '325955870-0vFjVCoNBElK7EmfkctMpOdmZ1SkLXPj3EvyPhmH';
-	$t4.access_token_secret = 'AFxEICma0IiM1C6mYY0kgy4vjvXODLg3lp2Q7F2EFA';
-	ss.add($t1, $t4);
-	null;
-	var $t5 = new $TwitterApiSalty_Credentials();
-	$t5.consumer_key = 'P0s5R4P8bUltW2UFkuQ';
-	$t5.consumer_secret = 'B0jKf4YVnm4aRDyjxT9QiWHD1QGzqAUDRM4s8bf1k8';
-	$t5.access_token_key = '80748695-lG15zHRrEWndVeAURLqHt0FgECU9mNIo4pAkxu2wv';
-	$t5.access_token_secret = 'znPCZkQXexrR2c2zOKJoCCsDxhIton2un6VPKFvBg';
-	ss.add($t1, $t5);
-	null;
-	var $t6 = new $TwitterApiSalty_Credentials();
-	$t6.consumer_key = 'hiiz5qRbOA5CDYywFuSOg';
-	$t6.consumer_secret = 'jRlw2sskOEWalxMVsBcDo9fSCSjK9hmuYIUAqKpdk';
-	$t6.access_token_key = '80748695-xBvHCQadwIaHe3AotZzFw35Q5LG9bpxjys6Zxawjk';
-	$t6.access_token_secret = 'ZNrQ03U3qGZQB9vbNcSfHyxnfK2V7SC0bkXQvAAvKE';
-	ss.add($t1, $t6);
-	null;
-	var $t7 = new $TwitterApiSalty_Credentials();
-	$t7.consumer_key = 'VMfotpGVu4THBiUNaJjKTQ';
-	$t7.consumer_secret = 'f6qEWmuFg5AFpTgVLHFmrvutNOO4ulDTU4GW8L00E';
-	$t7.access_token_key = '80748695-OWCqpYaEz3PKBkgGioQumbsRLlGO4izeWqj5KPsv1';
-	$t7.access_token_secret = 'zFSxreQkaAzK5h6ZShaQhS26BT92H3eRgHJqWkBTOs';
-	ss.add($t1, $t7);
-	null;
-	var $t8 = new $TwitterApiSalty_Credentials();
-	$t8.consumer_key = 'OSBkZmRwht81gQWUloLjQw';
-	$t8.consumer_secret = 'hkmy6bbfRPgYmsXo8suyiyVRxaP1qt1sa8nG7Fg2Q';
-	$t8.access_token_key = '80748695-w6K9EG6QlzOODwE0ejHZsSk4IhxbRZV2oLROPr7H2';
-	$t8.access_token_secret = 'HW6y9MQ6gPzF8kuyrr11AXmrn4gA0hT4iOPwh73UM';
-	ss.add($t1, $t8);
-	null;
-	var $t9 = new $TwitterApiSalty_Credentials();
-	$t9.consumer_key = 'SQ1MfzVE9inxcwBJ8n0U2Q';
-	$t9.consumer_secret = 'RcV80HDoYaGYFeoNe3vKYyXSGfUUXTQ0qgm5a63NSc';
-	$t9.access_token_key = '325955870-pHjF1PAbpmCKHQ2Y0zEeaCQ7bsvEStneiHbErxX6';
-	$t9.access_token_secret = 'JFlEk4FahPn8TVUOvIPXel7Xbw4gdTiB0TrwEsP9C5to0';
-	ss.add($t1, $t9);
-	null;
-	return Enumerable.from($t1).orderBy(function(m) {
-		return ss.Guid.newGuid();
-	}).toArray();
-};
-exports.FirehoseEater.TrendsUtils = $FirehoseEater_TrendsUtils;
-////////////////////////////////////////////////////////////////////////////////
-// TwitterApiSalty.Credentials
-var $TwitterApiSalty_Credentials = function() {
-	this.consumer_key = null;
-	this.consumer_secret = null;
-	this.access_token_key = null;
-	this.access_token_secret = null;
-};
-$TwitterApiSalty_Credentials.__typeName = 'TwitterApiSalty.Credentials';
-exports.TwitterApiSalty.Credentials = $TwitterApiSalty_Credentials;
-////////////////////////////////////////////////////////////////////////////////
-// TwitterApiSalty.Options
-var $TwitterApiSalty_Options = function() {
-	this.encrypt = false;
-	this.database = null;
-};
-$TwitterApiSalty_Options.__typeName = 'TwitterApiSalty.Options';
-exports.TwitterApiSalty.Options = $TwitterApiSalty_Options;
-////////////////////////////////////////////////////////////////////////////////
-// TwitterApiSalty.SqlServerFactory
-var $TwitterApiSalty_SqlServerFactory = function() {
-};
-$TwitterApiSalty_SqlServerFactory.__typeName = 'TwitterApiSalty.SqlServerFactory';
-$TwitterApiSalty_SqlServerFactory.get_instance = function() {
-	return $TwitterApiSalty_SqlServerFactory.$m_Singleton.value();
-};
-exports.TwitterApiSalty.SqlServerFactory = $TwitterApiSalty_SqlServerFactory;
-////////////////////////////////////////////////////////////////////////////////
-// TwitterApiSalty.Trend
-var $TwitterApiSalty_Trend = function() {
-	this.name = null;
-	this.url = null;
-	this.promoted_content = null;
-	this.query = null;
-	this.events = null;
-};
-$TwitterApiSalty_Trend.__typeName = 'TwitterApiSalty.Trend';
-exports.TwitterApiSalty.Trend = $TwitterApiSalty_Trend;
-////////////////////////////////////////////////////////////////////////////////
-// TwitterApiSalty.TrendsContainer
-var $TwitterApiSalty_TrendsContainer = function() {
-	this.as_of = new Date(0);
-	this.created_at = new Date(0);
-	this.trends = null;
-};
-$TwitterApiSalty_TrendsContainer.__typeName = 'TwitterApiSalty.TrendsContainer';
-exports.TwitterApiSalty.TrendsContainer = $TwitterApiSalty_TrendsContainer;
-////////////////////////////////////////////////////////////////////////////////
-// TwitterApiSalty.Tweet
-var $TwitterApiSalty_Tweet = function() {
-	this.created_at = new Date(0);
-	this.tidalServerDate = new Date(0);
-	this.text = null;
-	this.lang = null;
-};
-$TwitterApiSalty_Tweet.__typeName = 'TwitterApiSalty.Tweet';
-exports.TwitterApiSalty.Tweet = $TwitterApiSalty_Tweet;
-////////////////////////////////////////////////////////////////////////////////
-// TwitterApiSalty.TwitterFactory
-var $TwitterApiSalty_TwitterFactory = function() {
-};
-$TwitterApiSalty_TwitterFactory.__typeName = 'TwitterApiSalty.TwitterFactory';
-exports.TwitterApiSalty.TwitterFactory = $TwitterApiSalty_TwitterFactory;
-////////////////////////////////////////////////////////////////////////////////
-// TwitterApiSalty.TwitterTrendsLocation
-var $TwitterApiSalty_TwitterTrendsLocation = function() {
-	this.name = null;
-	this.placeType = null;
-	this.url = null;
-	this.parentid = 0;
-	this.country = null;
-	this.woeid = 0;
-	this.countryCode = null;
-};
-$TwitterApiSalty_TwitterTrendsLocation.__typeName = 'TwitterApiSalty.TwitterTrendsLocation';
-exports.TwitterApiSalty.TwitterTrendsLocation = $TwitterApiSalty_TwitterTrendsLocation;
-////////////////////////////////////////////////////////////////////////////////
-// TwitterApiSalty.TwitterTrendsPlaceType
-var $TwitterApiSalty_TwitterTrendsPlaceType = function() {
-	this.code = 0;
-	this.name = null;
-};
-$TwitterApiSalty_TwitterTrendsPlaceType.__typeName = 'TwitterApiSalty.TwitterTrendsPlaceType';
-exports.TwitterApiSalty.TwitterTrendsPlaceType = $TwitterApiSalty_TwitterTrendsPlaceType;
+$SqlApi_ManualResetEvent.__typeName = 'SqlApi.ManualResetEvent';
+exports.SqlApi.ManualResetEvent = $SqlApi_ManualResetEvent;
 ss.initClass($$Program, exports, {});
 ss.initClass($$TestProgram, exports, {});
-ss.initClass($SqlConfiguration, exports, {});
-ss.initClass($FirehoseEater_$FileLoader, exports, {});
-ss.initClass($FirehoseEater_$TwitterLocations, exports, {
+ss.initClass($SqlApi_$FileLoader, exports, {});
+ss.initClass($SqlApi_$TwitterLocations, exports, {
 	get_$locationsRetrievedEvent: function() {
 		return this.$m_LocationsRetrievedEvent;
 	},
@@ -591,7 +237,7 @@ ss.initClass($FirehoseEater_$TwitterLocations, exports, {
 									switch ($state) {
 										case 2: {
 											$state = -1;
-											$t1 = $FirehoseEater_TrendsUtils.getTrendLocations(this.$getNextCredential());
+											$t1 = TwitterApi.SqlApi.TrendsUtils.getTrendLocations(this.$getNextCredential());
 											$state = 3;
 											$t1.continueWith($sm);
 											return;
@@ -612,7 +258,7 @@ ss.initClass($FirehoseEater_$TwitterLocations, exports, {
 											loc = trendsContainer[$t2];
 											console.info('Inserting ' + loc.name + ' to sql');
 											// Got the trends, now we should send the data to SQL
-											$t3 = $FirehoseEater_SqlUtils.getSqlConnection();
+											$t3 = SqlApi.SqlApi.SqlUtils.getSqlConnection();
 											$state = 7;
 											$t3.continueWith($sm);
 											return;
@@ -692,7 +338,7 @@ ss.initClass($FirehoseEater_$TwitterLocations, exports, {
 		}
 	}
 });
-ss.initClass($FirehoseEater_$TwitterTrendsAggregator, exports, {
+ss.initClass($SqlApi_$TwitterTrendsAggregator, exports, {
 	add_$onTrendsReady: function(value) {
 		this.$1$OnTrendsReadyField = ss.delegateCombine(this.$1$OnTrendsReadyField, value);
 	},
@@ -708,7 +354,7 @@ ss.initClass($FirehoseEater_$TwitterTrendsAggregator, exports, {
 					switch ($state) {
 						case 0: {
 							$state = -1;
-							$t1 = ss.Task.whenAll(ss.arrayFromEnumerable(Enumerable.from($FirehoseEater_$TwitterTrendsAggregator.$m_ValidWoeIds).select(ss.mkdel(this, function(woeid) {
+							$t1 = ss.Task.whenAll(ss.arrayFromEnumerable(Enumerable.from($SqlApi_$TwitterTrendsAggregator.$m_ValidWoeIds).select(ss.mkdel(this, function(woeid) {
 								return this.$requestTrend(woeid);
 							}))));
 							$state = 1;
@@ -760,7 +406,7 @@ ss.initClass($FirehoseEater_$TwitterTrendsAggregator, exports, {
 									switch ($state) {
 										case 2: {
 											$state = -1;
-											$t1 = $FirehoseEater_TrendsUtils.getTrend(this.$getNextCredential(), woeid);
+											$t1 = TwitterApi.SqlApi.TrendsUtils.getTrend(this.$getNextCredential(), woeid);
 											$state = 3;
 											$t1.continueWith($sm);
 											return;
@@ -825,9 +471,9 @@ ss.initClass($FirehoseEater_$TwitterTrendsAggregator, exports, {
 		}
 	}
 });
-ss.initClass($FirehoseEater_DictionaryExtensions, exports, {});
-ss.initInterface($FirehoseEater_IReadOnlyResetEvent, exports, { waitOne: null, get_isSignaled: null });
-ss.initClass($FirehoseEater_ManualResetEvent, exports, {
+ss.initClass($SqlApi_DictionaryExtensions, exports, {});
+ss.initInterface($SqlApi_IReadOnlyResetEvent, exports, { waitOne: null, get_isSignaled: null });
+ss.initClass($SqlApi_ManualResetEvent, exports, {
 	get_isSignaled: function() {
 		return this.$1$IsSignaledField;
 	},
@@ -856,20 +502,9 @@ ss.initClass($FirehoseEater_ManualResetEvent, exports, {
 	reset: function() {
 		this.set_isSignaled(false);
 	}
-}, null, [$FirehoseEater_IReadOnlyResetEvent]);
-ss.initClass($FirehoseEater_SqlUtils, exports, {});
-ss.initClass($FirehoseEater_TrendsUtils, exports, {});
-ss.initClass($TwitterApiSalty_Credentials, exports, {});
-ss.initClass($TwitterApiSalty_Options, exports, {});
-ss.initClass($TwitterApiSalty_SqlServerFactory, exports, {});
-ss.initClass($TwitterApiSalty_Trend, exports, {});
-ss.initClass($TwitterApiSalty_TrendsContainer, exports, {});
-ss.initClass($TwitterApiSalty_Tweet, exports, {});
-ss.initClass($TwitterApiSalty_TwitterFactory, exports, {});
-ss.initClass($TwitterApiSalty_TwitterTrendsLocation, exports, {});
-ss.initClass($TwitterApiSalty_TwitterTrendsPlaceType, exports, {});
-$FirehoseEater_$TwitterTrendsAggregator.$m_singleton = new ss.Lazy(function() {
-	return new $FirehoseEater_$TwitterTrendsAggregator();
+}, null, [$SqlApi_IReadOnlyResetEvent]);
+$SqlApi_$TwitterTrendsAggregator.$m_singleton = new ss.Lazy(function() {
+	return new $SqlApi_$TwitterTrendsAggregator();
 });
 var $t1 = [];
 ss.add($t1, 1);
@@ -958,13 +593,10 @@ ss.add($t1, 23424977);
 null;
 ss.add($t1, 23424982);
 null;
-$FirehoseEater_$TwitterTrendsAggregator.$m_ValidWoeIds = $t1;
-$TwitterApiSalty_SqlServerFactory.$m_Singleton = new ss.Lazy(function() {
-	return require('mssql');
-});
+$SqlApi_$TwitterTrendsAggregator.$m_ValidWoeIds = $t1;
 $$Program.$m_Connection = null;
 $$Program.$main();
-$FirehoseEater_$TwitterLocations.$m_singleton = new ss.Lazy(function() {
-	return new $FirehoseEater_$TwitterLocations();
+$SqlApi_$TwitterLocations.$m_singleton = new ss.Lazy(function() {
+	return new $SqlApi_$TwitterLocations();
 });
 //Instance.RequestLocations();

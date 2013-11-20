@@ -7,9 +7,9 @@ using System.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using SqlApi;
+using TwitterApiSalty;
 
-namespace SqlApi
+namespace FirehoseEater
 {
     /// <summary>
     /// This class is reponsible for managing the consumer keys

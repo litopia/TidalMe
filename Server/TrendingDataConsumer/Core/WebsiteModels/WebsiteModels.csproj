@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{08630F1A-C041-4BA2-83A4-58D51C229976}</ProjectGuid>
+    <ProjectGuid>{92E1C287-1F6D-4C7D-ACA0-EAFCCF3E5A74}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TrendingDataConsumer</RootNamespace>
-    <AssemblyName>TrendingDataConsumer</AssemblyName>
+    <RootNamespace>WebsiteModels</RootNamespace>
+    <AssemblyName>WebsiteModels</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NoStdLib>True</NoStdLib>
@@ -43,12 +43,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="TwitterLocations.cs" />
-    <Compile Include="TestMain.cs" />
-    <Compile Include="SaltyUtils.cs" />
-    <Compile Include="TwitterTrendsAggregator.cs" />
-    <Compile Include="Main.cs" />
-    <Compile Include="FileLoader.cs" />
+    <Compile Include="TwitterTrendingDataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

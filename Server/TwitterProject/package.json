@@ -29,7 +29,8 @@
     "socket.io": ">= 0.8.7",
     "connect": ">=1.8.5",
     "recaptcha": ">=1.1.0",
-    "less-middleware": ">=0.1.12"
+    "less-middleware": ">=0.1.12",
+	"mssql": ">= 0"
   },
   "noAnalyze": true,
   "license": "Apache",

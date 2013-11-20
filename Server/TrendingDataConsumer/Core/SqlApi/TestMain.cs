@@ -1,4 +1,4 @@
-﻿using SqlApi;
+﻿using FirehoseEater;
 using NodeJS;
 using NodeJS.HttpModule;
 using System;
@@ -8,7 +8,7 @@ using System.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using SqlApi;
+using TwitterApiSalty;
 
 class TestProgram
 {
