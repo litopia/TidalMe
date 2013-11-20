@@ -97,12 +97,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" Condition="!Exists('$(SolutionDir)packages\Saltarelle.Compiler.2.4.0\tools\Saltarelle.Compiler.targets')" />
   <Import Project="$(SolutionDir)packages\Saltarelle.Compiler.2.4.0\tools\Saltarelle.Compiler.targets" Condition="Exists('$(SolutionDir)packages\Saltarelle.Compiler.2.4.0\tools\Saltarelle.Compiler.targets')" />
-  <Target Name="BeforeBuild">
-    <ItemGroup>
-      <MscorlibScript Include="$(SolutionDir)packages\**\mscorlib.js" />
-    </ItemGroup>
-    <Copy SourceFiles="@(MscorlibScript)" DestinationFolder="$(ProjectDir)node_modules" />
-  </Target>
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetDir)$(TargetName).js" "$(SolutionDir)\Deployment"
 copy "$(SolutionDir)\Scripts\Externals\*.js" "$(SolutionDir)\Deployment"</PostBuildEvent>
