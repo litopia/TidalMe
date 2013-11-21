@@ -97,12 +97,27 @@ $WebsiteModels_TwitterTrendingDataModel.$getSqlConnection = function() {
 };
 exports.WebsiteModels.TwitterTrendingDataModel = $WebsiteModels_TwitterTrendingDataModel;
 ss.initClass($WebsiteModels_TwitterTrendingDataModel, exports, {
-	getData: function(callback) {
+	getLocations: function(callback) {
 		if (ss.isNullOrUndefined($WebsiteModels_TwitterTrendingDataModel.$m_Connection)) {
 			return;
 		}
 		var request = $WebsiteModels_TwitterTrendingDataModel.$m_Connection.request();
-		request.query(ss.formatString('select top 10 Name, count(*) as Score from TwtrTrendingData\r\nWHERE WoeId = 1\r\nGROUP BY Name\r\nORDER BY count(*) desc'), function(err, recordsets) {
+		request.query(ss.formatString('SELECT WoeId, Name\r\nFROM Location\r\nWHERE PlaceTypeCode = 12 OR PlaceTypeCode = 19\r\nORDER BY Name'), function(err, recordsets) {
+			if (!ss.isNullOrUndefined(err)) {
+				console.info('err = ' + err);
+				callback(null);
+			}
+			else {
+				callback(recordsets);
+			}
+		});
+	},
+	getData: function(callback, woeId) {
+		if (ss.isNullOrUndefined($WebsiteModels_TwitterTrendingDataModel.$m_Connection)) {
+			return;
+		}
+		var request = $WebsiteModels_TwitterTrendingDataModel.$m_Connection.request();
+		request.query(ss.formatString('select top 10 Name, count(*) as Score from TwtrTrendingData\r\nWHERE WoeId = {0}\r\nGROUP BY Name\r\nORDER BY count(*) desc', woeId), function(err, recordsets) {
 			if (!ss.isNullOrUndefined(err)) {
 				console.info('err = ' + err);
 				callback(null);

@@ -1,6 +1,9 @@
 // JavaScript Document for UI interaction
 
 $(document).ready(function(e) {
+
+
+
 	
 	var h = $("#tweet-list").height();
 	//$("#tweet-list").css("height", "h");

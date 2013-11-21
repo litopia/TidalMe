@@ -30,8 +30,8 @@ namespace WebsiteModels
             NodeJS.Console.Log("Getting instance");
             return new TwitterTrendingDataModel();
         }
-
-        public void GetData(Action<object> callback)
+        
+        public void GetLocations(Action<object> callback)
         {
             if (m_Connection == null)
             {
@@ -39,10 +39,37 @@ namespace WebsiteModels
             }
 
             Request request = m_Connection.Request();
-            request.Query(String.Format(@"select top 10 Name, count(*) as Score from TwtrTrendingData
-WHERE WoeId = 1
+            request.Query(String.Format(
+@"SELECT WoeId, Name
+FROM Location
+WHERE PlaceTypeCode = 12 OR PlaceTypeCode = 19
+ORDER BY Name"), delegate(object err, object recordsets)
+                       {
+                           if (!Script.IsNullOrUndefined(err))
+                           {
+                               NodeJS.Console.Info("err = " + err);
+                               callback(null);
+                           }
+                           else
+                           {
+                               callback(recordsets);
+                           }
+                       });
+        }
+
+        public void GetData(Action<object> callback, int woeId)
+        {
+            if (m_Connection == null)
+            {
+                return;
+            }
+
+            Request request = m_Connection.Request();
+            request.Query(String.Format(
+@"select top 10 Name, count(*) as Score from TwtrTrendingData
+WHERE WoeId = {0}
 GROUP BY Name
-ORDER BY count(*) desc"), delegate(object err, object recordsets)
+ORDER BY count(*) desc", woeId), delegate(object err, object recordsets)
             {
                 if (!Script.IsNullOrUndefined(err))
                 {

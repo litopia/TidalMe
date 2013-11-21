@@ -17,6 +17,14 @@ module.exports = function(app) {
 			}
 			
 			res.json(testData);
+		}, req.query.location || 1);
+	
+    });
+    
+    app.get('/data/locations', function (req, res) {
+	
+		instance.getLocations(function(obj){
+			res.json(obj);
 		});
 	
     });
