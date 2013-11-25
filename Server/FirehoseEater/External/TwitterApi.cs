@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SqlApi
+namespace TwitterApi
 {
     public static class TwitterFactory
     {
@@ -21,6 +21,7 @@ namespace SqlApi
     public class Twitter
     {
         public extern void Get(string req, JsDictionary<string, object> options, Action<object> callback);
+        public extern void Search(string req, object options, Action<object> callback);
         public extern void Stream(string req, Action<Stream> callback);
     }
 
@@ -52,6 +53,17 @@ namespace SqlApi
 
         public string Text;
         public string Lang;
+    }
+
+    public class SearchOptions
+    {
+        public string Geocode;
+        public string Lang;
+        public string Locale;
+        public string Result_type;
+        public int Count;
+        public string Until;
+        public bool Include_entities;
     }
 
     public class TrendsContainer

@@ -7,9 +7,8 @@ using System.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using SqlApi;
 
-namespace SqlApi
+namespace TwitterApi
 {
     public static class TrendsUtils
     {
@@ -490,6 +489,34 @@ namespace SqlApi
 
 
             }.OrderBy(m => Guid.NewGuid()).ToList();
+        }
+        
+        public static async Task<List<Tweet>> SearchTweets(Credentials creds, string query, SearchOptions searchOptions)
+        {
+            NodeJS.Console.Info("+SearchTweets for " + query);
+
+            TaskCompletionSource<List<Tweet>> tcs = new TaskCompletionSource<List<Tweet>>();
+
+            var twitter = TwitterFactory.Get();
+            var twitterObj = TwitterFactory.Get(twitter, creds);
+            
+            twitterObj.Search(query, searchOptions, delegate(object data)
+            {
+                if (data.ToString().IndexOf("Too Many Requests") != -1)
+                {
+                    // error
+                    NodeJS.Console.Info("Search Error: " + data);
+                    tcs.SetException(new Exception("Too Many Requests"));
+                    return;
+                }
+
+                List<Tweet> trendsContainer = Script.Reinterpret<List<Tweet>>(((dynamic)data).statuses);
+
+                NodeJS.Console.Info("-Finished SearchTweets for " + query + "; data=" + data.ToString());
+                tcs.SetResult(trendsContainer);
+            });
+
+            return await tcs.Task;
         }
     }
 }

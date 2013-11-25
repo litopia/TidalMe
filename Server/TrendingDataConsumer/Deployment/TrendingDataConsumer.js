@@ -109,7 +109,7 @@ $$Program.$getSqlConnection = function() {
 	return $tcs.task;
 };
 $$Program.$processTweetData = function() {
-	var $t1 = new TwitterApi.SqlApi.Credentials();
+	var $t1 = new TwitterApi.TwitterApi.Credentials();
 	$t1.consumer_key = '5iaBY1vY49ngNJBMy0vw';
 	$t1.consumer_secret = 'bBx36uscbcaY0h7kX9HktfVzty7Vyb7n0FJcEgw8';
 	$t1.access_token_key = '325955870-uePDCtgtivjrOyUnTORwGOXpRlBn3rCC1xAeDOcB';
@@ -148,7 +148,7 @@ var $SqlApi_$TwitterLocations = function() {
 	this.$m_Lock = new Object();
 	this.$m_ValidCredentials = null;
 	this.$m_LocationsRetrievedEvent = new $SqlApi_ManualResetEvent();
-	this.$m_ValidCredentials = TwitterApi.SqlApi.TrendsUtils.getValidCredentials();
+	this.$m_ValidCredentials = TwitterApi.TwitterApi.TrendsUtils.getValidCredentials();
 };
 $SqlApi_$TwitterLocations.__typeName = 'SqlApi.$TwitterLocations';
 $SqlApi_$TwitterLocations.get_$instance = function() {
@@ -158,9 +158,7 @@ $SqlApi_$TwitterLocations.get_$instance = function() {
 // SqlApi.TwitterTrendsAggregator
 var $SqlApi_$TwitterTrendsAggregator = function() {
 	this.$m_Lock = new Object();
-	this.$m_ValidCredentials = null;
 	this.$1$OnTrendsReadyField = null;
-	this.$m_ValidCredentials = TwitterApi.SqlApi.TrendsUtils.getValidCredentials();
 	this.$requestTrends();
 	setInterval(ss.mkdel(this, function() {
 		this.$requestTrends();
@@ -237,7 +235,7 @@ ss.initClass($SqlApi_$TwitterLocations, exports, {
 									switch ($state) {
 										case 2: {
 											$state = -1;
-											$t1 = TwitterApi.SqlApi.TrendsUtils.getTrendLocations(this.$getNextCredential());
+											$t1 = TwitterApi.TwitterApi.TrendsUtils.getTrendLocations(this.$getNextCredential());
 											$state = 3;
 											$t1.continueWith($sm);
 											return;
@@ -406,7 +404,7 @@ ss.initClass($SqlApi_$TwitterTrendsAggregator, exports, {
 									switch ($state) {
 										case 2: {
 											$state = -1;
-											$t1 = TwitterApi.SqlApi.TrendsUtils.getTrend(this.$getNextCredential(), woeid);
+											$t1 = TwitterApi.TwitterApi.TrendsUtils.getTrend(TwitterApi.TwitterApi.TrendsCredentialsUtils.getNextCredential(), woeid);
 											$state = 3;
 											$t1.continueWith($sm);
 											return;
@@ -429,7 +427,7 @@ ss.initClass($SqlApi_$TwitterTrendsAggregator, exports, {
 							catch ($t2) {
 								e = ss.Exception.wrap($t2);
 								if (e.get_message() === 'Too Many Requests' || ss.isValue(e.get_innerException()) && e.get_innerException().get_message() === 'Too Many Requests') {
-									this.$invalidateCredential();
+									TwitterApi.TwitterApi.TrendsCredentialsUtils.invalidateCredential();
 									this.$requestTrend(woeid);
 									$tcs.setResult(null);
 									return;
@@ -454,21 +452,6 @@ ss.initClass($SqlApi_$TwitterTrendsAggregator, exports, {
 		});
 		$sm();
 		return $tcs.task;
-	},
-	$getNextCredential: function() {
-		this.$m_Lock;
-		{
-			return Enumerable.from(this.$m_ValidCredentials).first();
-		}
-	},
-	$invalidateCredential: function() {
-		this.$m_Lock;
-		{
-			// Put the invalidated one at the end
-			var hold = Enumerable.from(this.$m_ValidCredentials).first();
-			ss.removeAt(this.$m_ValidCredentials, 0);
-			ss.add(this.$m_ValidCredentials, hold);
-		}
 	}
 });
 ss.initClass($SqlApi_DictionaryExtensions, exports, {});

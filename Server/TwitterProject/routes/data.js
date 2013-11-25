@@ -1,5 +1,6 @@
 module.exports = function(app) {
 	require("mscorlib");
+    require("linq");
 	var WebsiteModels = require("WebsiteModels");
 	var instance = WebsiteModels.WebsiteModels.TwitterTrendingDataModel.getInstance();
 	
@@ -7,17 +8,8 @@ module.exports = function(app) {
     app.get('/data/table', function (req, res) {
 	
 		instance.getData(function(obj){
-			var testData = [];
-			for(var i = 0; i<10; i++){
-				var row = {};
-				row.number = obj[i].Score;
-				row.name = obj[i].Name;
-				row.tweet = "Three @USSoccer fans are clearly ready to qualify for the world cup tonight.  http://instagram.com/hello #worldcup";
-				testData.push(row);
-			}
-			
-			res.json(testData);
-		}, req.query.location || 1);
+			res.json(obj);
+		}, req.query.location || 1, parseInt(req.query.days));
 	
     });
     
@@ -26,6 +18,24 @@ module.exports = function(app) {
 		instance.getLocations(function(obj){
 			res.json(obj);
 		});
+	
+    });
+    
+    app.get('/data/tweets/current', function (req, res) {
+	
+		instance.getCurrentTweets(function(obj){
+            console.log('callback');
+			res.json(obj);
+		}, req.query.query);
+	
+    });
+    
+    app.get('/data/tweets/popularImages', function (req, res) {
+	
+		instance.getPopularTweetImages(function(obj){
+            console.log('callback');
+			res.json(obj);
+		}, req.query.query);
 	
     });
 }

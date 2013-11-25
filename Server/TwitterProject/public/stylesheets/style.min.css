@@ -1,8 +1,8 @@
 html{background-color:#fff;margin:0;padding:0}
 body{background-color:#fff;border-top:none;color:#333;font-size:.85em;font-family:"Segoe UI",Verdana,Helvetica,Sans-Serif;margin:0;padding:0}
 a *{cursor:pointer}
-.locationSelector{float:right}.locationSelector .btn-danger{background-color:#ef5816;border-color:#ef5816;opacity:0.84}
-.locationSelector .btn-danger:hover{background-color:#ef5816;opacity:1}
+.headerSelector{margin-left:5px;float:right}.headerSelector .btn-danger{background-color:#ef5816;border-color:#ef5816;opacity:0.84}
+.headerSelector .btn-danger:hover{background-color:#ef5816;opacity:1}
 #body{position:relative}
 .page-header{padding:19px 22px 9px 22px;border-bottom:none;margin:0 !important;-webkit-box-shadow:0 3px 5px 3px rgba(0,0,0,0.1);box-shadow:0 3px 5px 3px rgba(0,0,0,0.1);z-index:-1}.page-header .pageTitle{display:inline}.page-header .pageTitle a{color:#333}
 .page-header .dropdown-menu{right:0;left:auto}
@@ -43,7 +43,7 @@ a *{cursor:pointer}
 #content-box .update-box .tweet-box .default{height:auto;transition:min-height 2s}#content-box .update-box .tweet-box .default li:nth-child(n+5){display:none}
 #content-box .update-box .tweet-box .show{overflow-y:scroll;height:780px}
 #content-box .update-box .img-box img{width:100%}
-#content-box .update-box .img-box li{margin-bottom:7px;overflow:hidden}
+#content-box .update-box .img-box li{margin-bottom:7px;overflow:hidden;width:32%;display:inline-block}
 #content-box .update-box .img-box .expend-botton-up{color:#666;font-size:0.9em;cursor:pointer;padding:5px 0;top:-36px;position:relative;display:inline-block}#content-box .update-box .img-box .expend-botton-up:hover{text-decoration:underline}
 #content-box .update-box .img-box .show{overflow-y:scroll;height:780px}
 #content-box .analysis-box{border-left:1px solid rgba(0,0,0,0.1);height:930px}@media (max-width:992px){#content-box .analysis-box{display:none}#content-box .analysis-box.active{display:block;position:absolute;top:0;right:0;background:#fff;z-index:0;border:none}}#content-box .analysis-box #closeAnalysis{display:inline-block;padding:0;margin-top:20px;background-color:#ef5816;opacity:0.5;cursor:pointer;right:22px;position:absolute;z-index:1}#content-box .analysis-box #closeAnalysis span{padding:5px}
