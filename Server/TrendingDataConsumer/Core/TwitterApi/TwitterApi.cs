@@ -95,10 +95,10 @@ namespace TwitterApi
 
     public class Sizes
     {
-        Size Large;
-        Size Medium;
-        Size Small;
-        Size Thumb;
+        public Size Large;
+        public Size Medium;
+        public Size Small;
+        public Size Thumb;
     }
 
     public class Size

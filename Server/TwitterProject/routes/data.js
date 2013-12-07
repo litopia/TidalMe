@@ -24,18 +24,24 @@ module.exports = function(app) {
     app.get('/data/tweets/current', function (req, res) {
 	
 		instance.getCurrentTweets(function(obj){
-            console.log('callback');
 			res.json(obj);
 		}, req.query.query);
 	
     });
-    
+
     app.get('/data/tweets/popularImages', function (req, res) {
-	
-		instance.getPopularTweetImages(function(obj){
-            console.log('callback');
-			res.json(obj);
-		}, req.query.query);
-	
+
+        instance.getPopularTweetImages(function (obj) {
+            res.json(obj);
+        }, req.query.query);
+
+    });
+
+    app.get('/data/tweets/getGraphData', function (req, res) {
+
+        instance.getGraphData(function (obj) {
+            res.json(obj);
+        }, req.query.woeid, req.query.query, req.query.days);
+
     });
 }

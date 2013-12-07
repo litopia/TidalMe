@@ -493,7 +493,7 @@ namespace TwitterApi
         
         public static async Task<List<Tweet>> SearchTweets(Credentials creds, string query, SearchOptions searchOptions)
         {
-            NodeJS.Console.Info("+SearchTweets for " + query);
+            //NodeJS.Console.Info("+SearchTweets for " + query);
 
             TaskCompletionSource<List<Tweet>> tcs = new TaskCompletionSource<List<Tweet>>();
 
@@ -512,7 +512,7 @@ namespace TwitterApi
 
                 List<Tweet> trendsContainer = Script.Reinterpret<List<Tweet>>(((dynamic)data).statuses);
 
-                NodeJS.Console.Info("-Finished SearchTweets for " + query + "; data=" + data.ToString());
+                //NodeJS.Console.Info("-Finished SearchTweets for " + query + "; data=" + data.ToString());
                 tcs.SetResult(trendsContainer);
             });
 

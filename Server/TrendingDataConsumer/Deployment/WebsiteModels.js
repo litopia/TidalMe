@@ -28,7 +28,7 @@ $WebsiteModels_TwitterTrendingDataModel.$initialize = function() {
 			switch ($state) {
 				case 0: {
 					$state = -1;
-					console.log('Initialize');
+					//NodeJS.Console.Log("Initialize");
 					$t1 = $WebsiteModels_TwitterTrendingDataModel.$getSqlConnection();
 					$state = 1;
 					$t1.continueWith($sm);
@@ -49,7 +49,7 @@ $WebsiteModels_TwitterTrendingDataModel.$initialize = function() {
 	$sm();
 };
 $WebsiteModels_TwitterTrendingDataModel.getInstance = function() {
-	console.log('Getting instance');
+	//NodeJS.Console.Log("Getting instance");
 	return new $WebsiteModels_TwitterTrendingDataModel();
 };
 $WebsiteModels_TwitterTrendingDataModel.$getSqlConnection = function() {
@@ -112,6 +112,7 @@ exports.WebsiteModels.TwitterTrendingDataModel = $WebsiteModels_TwitterTrendingD
 // WebsiteModels.TwitterTrendingDataModel.TwitterTrendingData
 var $WebsiteModels_TwitterTrendingDataModel$TwitterTrendingData = function() {
 	this.name = null;
+	this.query = null;
 	this.number = 0;
 	this.tweet = null;
 };
@@ -139,7 +140,7 @@ ss.initClass($WebsiteModels_TwitterTrendingDataModel, exports, {
 			return;
 		}
 		var request = $WebsiteModels_TwitterTrendingDataModel.$m_Connection.request();
-		request.query(ss.formatString('select top 10 Name as name, count(*) as number from TwtrTrendingData\r\nWHERE WoeId = {0} AND DATEDIFF(DAY, time, GETDATE()) <= {1}\r\nGROUP BY Name\r\nORDER BY count(*) desc', woeId, numDays), ss.mkdel(this, function(err, recordsets) {
+		request.query(ss.formatString('select top 10 Name as name, Query as query, count(*) as number from TwtrTrendingData\r\nWHERE WoeId = {0} AND DATEDIFF(DAY, time, GETDATE()) <= {1}\r\nGROUP BY Name, Query\r\nORDER BY count(*) desc', woeId, numDays), ss.mkdel(this, function(err, recordsets) {
 			var $state = 0, tasks, $t1, record, trendingData, $t2, so, $t3;
 			var $sm = ss.mkdel(this, function() {
 				$sm1:
@@ -188,6 +189,39 @@ ss.initClass($WebsiteModels_TwitterTrendingDataModel, exports, {
 			$sm();
 		}));
 	},
+	getGraphData: function(callback, woeId, trend, numDays) {
+		if (ss.isNullOrUndefined($WebsiteModels_TwitterTrendingDataModel.$m_Connection)) {
+			return;
+		}
+		// Expecting trend as the query which has no spaces
+		if (trend.indexOf(' ') !== -1) {
+			return;
+		}
+		// Note: there is a sql injection hole here
+		var request = $WebsiteModels_TwitterTrendingDataModel.$m_Connection.request();
+		request.query(ss.formatString("select CAST(Time as date) as Date, DATEPART(hour,Time) as Hour, count(*) as Number from TwtrTrendingData\r\nWHERE WoeId = {0} AND Query = '{1}' AND DATEDIFF(DAY, time, GETDATE()) <= {2}\r\nGROUP BY CAST(Time as date), DATEPART(hour,Time)\r\nORDER BY date, hour, count(*) desc", woeId, trend, numDays), function(err, recordsets) {
+			if (!ss.isNullOrUndefined(err)) {
+				console.info('err = ' + err);
+				callback(null);
+			}
+			else {
+				// Put the data into the buckets
+				var buckets = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+				var lowerbound = new Date((new Date()).valueOf() + Math.round(-1 * numDays * 86400000));
+				for (var $t1 = 0; $t1 < recordsets.length; $t1++) {
+					var record = recordsets[$t1];
+					var recordTime = ss.unbox(ss.cast(new Date(Date.parse(ss.cast(record.Date, String))), Date));
+					recordTime = ss.unbox(ss.cast(new Date(recordTime.valueOf() + Math.round(ss.unbox(ss.cast(record.Hour, Number)) * 3600000)), Date));
+					if (recordTime < lowerbound) {
+						continue;
+					}
+					var bucketIndex = ss.Int32.div(recordTime - lowerbound, 3600000 * numDays);
+					buckets[bucketIndex] = ss.unbox(ss.cast(buckets[bucketIndex] + record.Number, ss.Int32));
+				}
+				callback(buckets);
+			}
+		});
+	},
 	$fillInTrendingDataWithTweet: function(trendingData, so) {
 		var $state = 0, $tcs = new ss.TaskCompletionSource(), $t1, tweets;
 		var $sm = ss.mkdel(this, function() {
@@ -206,7 +240,7 @@ ss.initClass($WebsiteModels_TwitterTrendingDataModel, exports, {
 							$state = -1;
 							tweets = $t1.getResult();
 							trendingData.tweet = Enumerable.from(tweets).first().text;
-							console.info('**Finished ' + trendingData.name);
+							//NodeJS.Console.Info("**Finished " + trendingData.Name);
 							$state = -1;
 							break $sm1;
 						}
@@ -256,7 +290,7 @@ ss.initClass($WebsiteModels_TwitterTrendingDataModel, exports, {
 								return $t3;
 							}).take(20).toArray();
 							//results["tweetsPerHour"] = (60 * 60 * 1000) * COUNT_TWEETS / (DateTime.Parse(tweets.First().CreateDate) - DateTime.Parse(tweets.Last().CreateDate));
-							console.info('Callback for ' + query);
+							//NodeJS.Console.Info("Callback for " + query);
 							callback(results);
 						}
 						$state = -1;
@@ -271,7 +305,7 @@ ss.initClass($WebsiteModels_TwitterTrendingDataModel, exports, {
 		$sm();
 	},
 	getPopularTweetImages: function(callback, query) {
-		var $state = 0, $t1, so, $t2, tweets, results;
+		var $state = 0, $t1, so, $t2, tweets, existingTweets, results;
 		var $sm = ss.mkdel(this, function() {
 			$sm1:
 			for (;;) {
@@ -292,13 +326,22 @@ ss.initClass($WebsiteModels_TwitterTrendingDataModel, exports, {
 						$state = -1;
 						tweets = $t2.getResult();
 						if (!ss.staticEquals(callback, null)) {
+							existingTweets = new (ss.makeGenericType(ss.Dictionary$2, [String, Boolean]))();
 							results = {};
-							results['tweets'] = Enumerable.from(tweets).select(function(m) {
+							results['tweets'] = Enumerable.from(tweets).where(function(tweet) {
+								var large = Enumerable.from(tweet.entities.media).first().sizes.large;
+								var key = large.h + ' ' + large.w;
+								if (!existingTweets.containsKey(key)) {
+									existingTweets.set_item(key, true);
+									return true;
+								}
+								return false;
+							}).select(function(m) {
 								var $t3 = new $WebsiteModels_TweetResult();
 								$t3.tweetImage = Enumerable.from(m.entities.media).first().media_url;
 								return $t3;
-							}).take(20).toArray();
-							console.info('Callback for ' + query);
+							}).toArray();
+							//NodeJS.Console.Info("Callback for " + query);
 							callback(results);
 						}
 						$state = -1;
@@ -339,7 +382,7 @@ ss.initClass($WebsiteModels_TwitterTrendingDataModel, exports, {
 										case 2: {
 											$state = -1;
 											x = $t1.getResult();
-											console.info('*GetTweetWithRetries query: ' + query + '; x=' + Enumerable.from(x).first().text);
+											//NodeJS.Console.Info("*GetTweetWithRetries query: " + query + "; x=" + x.First().Text);
 											$tcs.setResult(x);
 											return;
 										}

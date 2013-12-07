@@ -31,13 +31,13 @@ namespace WebsiteModels
 
         static async void Initialize()
         {
-            NodeJS.Console.Log("Initialize");
+            //NodeJS.Console.Log("Initialize");
             m_Connection = await GetSqlConnection();
         }
 
         public static TwitterTrendingDataModel GetInstance()
         {
-            NodeJS.Console.Log("Getting instance");
+            //NodeJS.Console.Log("Getting instance");
             return new TwitterTrendingDataModel();
         }
 
@@ -70,6 +70,7 @@ ORDER BY Name"), delegate(object err, object recordsets)
         public class TwitterTrendingData
         {
             public string Name;
+            public string Query;
             public int Number;
             public string Tweet;
         }
@@ -83,9 +84,9 @@ ORDER BY Name"), delegate(object err, object recordsets)
 
             Request request = m_Connection.Request();
             request.Query(String.Format(
-@"select top 10 Name as name, count(*) as number from TwtrTrendingData
+@"select top 10 Name as name, Query as query, count(*) as number from TwtrTrendingData
 WHERE WoeId = {0} AND DATEDIFF(DAY, time, GETDATE()) <= {1}
-GROUP BY Name
+GROUP BY Name, Query
 ORDER BY count(*) desc", woeId, numDays), async delegate(object err, object[] recordsets)
             {
                 if (!Script.IsNullOrUndefined(err))
@@ -113,9 +114,60 @@ ORDER BY count(*) desc", woeId, numDays), async delegate(object err, object[] re
 
                     await Task.WhenAll(tasks);
 
-                    callback(recordsets);                    
+                    callback(recordsets);
                 }
             });
+        }
+
+        public void GetGraphData(Action<object> callback, int woeId, string trend, int numDays)
+        {
+            if (m_Connection == null)
+            {
+                return;
+            }
+
+            // Expecting trend as the query which has no spaces
+            if (trend.Contains(" "))
+            {
+                return;
+            }
+
+            // Note: there is a sql injection hole here
+            Request request = m_Connection.Request();
+            request.Query(String.Format(
+@"select CAST(Time as date) as Date, DATEPART(hour,Time) as Hour, count(*) as Number from TwtrTrendingData
+WHERE WoeId = {0} AND Query = '{1}' AND DATEDIFF(DAY, time, GETDATE()) <= {2}
+GROUP BY CAST(Time as date), DATEPART(hour,Time)
+ORDER BY date, hour, count(*) desc", woeId, trend, numDays), delegate(object err, object[] recordsets)
+                       {
+                           if (!Script.IsNullOrUndefined(err))
+                           {
+                               NodeJS.Console.Info("err = " + err);
+                               callback(null);
+                           }
+                           else
+                           {
+                               // Put the data into the buckets
+                               int[] buckets = new int[24] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,};
+                               DateTime lowerbound = DateTime.Now.AddDays(-1 * numDays);
+
+                               foreach (object record in recordsets)
+                               {
+                                   DateTime recordTime = DateTime.Parse(((dynamic)record).Date);
+                                   recordTime = recordTime.AddHours(((dynamic)record).Hour);
+
+                                   if (recordTime < lowerbound)
+                                   {
+                                       continue;
+                                   }
+
+                                   int bucketIndex = (recordTime - lowerbound) / (1000 * 60 * 60 * numDays);
+                                   buckets[bucketIndex] = buckets[bucketIndex] + ((dynamic)record).Number;
+                               }
+
+                               callback(buckets);
+                           }
+                       });
         }
 
         private async Task FillInTrendingDataWithTweet(TwitterTrendingData trendingData, SearchOptions so)
@@ -123,7 +175,7 @@ ORDER BY count(*) desc", woeId, numDays), async delegate(object err, object[] re
             List<Tweet> tweets = await GetTweetWithRetries(trendingData.Name, so);
             trendingData.Tweet = tweets.First().Text;
 
-            NodeJS.Console.Info("**Finished " + trendingData.Name);
+            //NodeJS.Console.Info("**Finished " + trendingData.Name);
         }
 
         public async void GetCurrentTweets(Action<object> callback, string query)
@@ -147,7 +199,7 @@ ORDER BY count(*) desc", woeId, numDays), async delegate(object err, object[] re
                     UserScreenName = m.User.ScreenName,
                 }).Take(20).ToList();
                 //results["tweetsPerHour"] = (60 * 60 * 1000) * COUNT_TWEETS / (DateTime.Parse(tweets.First().CreateDate) - DateTime.Parse(tweets.Last().CreateDate));
-                NodeJS.Console.Info("Callback for " + query);
+                //NodeJS.Console.Info("Callback for " + query);
                 callback(results);
             }
         }
@@ -164,12 +216,23 @@ ORDER BY count(*) desc", woeId, numDays), async delegate(object err, object[] re
 
             if (callback != null)
             {
+                Dictionary<string, bool> existingTweets = new Dictionary<string, bool>();
                 JsDictionary<string, object> results = new JsDictionary<string, object>();
-                results["tweets"] = tweets.Select(m => new TweetResult()
+                results["tweets"] = tweets.Where(delegate(Tweet tweet)
+                {
+                    Size large = tweet.Entities.Media.First().Sizes.Large;
+                    string key = large.H + " " + large.W;
+                    if (!existingTweets.ContainsKey(key))
+                    {
+                        existingTweets[key] = true;
+                        return true;
+                    }
+                    return false;
+                }).Select(m => new TweetResult()
                 {
                     TweetImage = m.Entities.Media.First().MediaUrl,
-                }).Take(20).ToList();
-                NodeJS.Console.Info("Callback for " + query);
+                }).ToList();
+                //NodeJS.Console.Info("Callback for " + query);
                 callback(results);
             }
         }
@@ -179,12 +242,12 @@ ORDER BY count(*) desc", woeId, numDays), async delegate(object err, object[] re
             try
             {
                 var x = await TrendsUtils.SearchTweets(TrendsCredentialsUtils.GetNextCredential(), query, options);
-                NodeJS.Console.Info("*GetTweetWithRetries query: " + query + "; x=" + x.First().Text);
+                //NodeJS.Console.Info("*GetTweetWithRetries query: " + query + "; x=" + x.First().Text);
                 return x;
             }
             catch (Exception e)
             {
-                
+
                 NodeJS.Console.Info("GetTweetWithRetries exception: " + query + "; ex = " + Json.Stringify(e));
 
                 if (e.Message == "Too Many Requests" ||

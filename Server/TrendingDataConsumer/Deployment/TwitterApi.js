@@ -62,10 +62,10 @@
 	////////////////////////////////////////////////////////////////////////////////
 	// TwitterApi.Sizes
 	var $TwitterApi_Sizes = function() {
-		this.$large = null;
-		this.$medium = null;
-		this.$small = null;
-		this.$thumb = null;
+		this.large = null;
+		this.medium = null;
+		this.small = null;
+		this.thumb = null;
 	};
 	$TwitterApi_Sizes.__typeName = 'TwitterApi.Sizes';
 	exports.TwitterApi.Sizes = $TwitterApi_Sizes;
@@ -641,7 +641,7 @@
 					switch ($state) {
 						case 0: {
 							$state = -1;
-							console.info('+SearchTweets for ' + query);
+							//NodeJS.Console.Info("+SearchTweets for " + query);
 							tcs = new ss.TaskCompletionSource();
 							twitter = require('twitter');
 							twitterObj = new twitter(creds);
@@ -653,7 +653,7 @@
 									return;
 								}
 								var trendsContainer = ss.cast(data.statuses, Array);
-								console.info('-Finished SearchTweets for ' + query + '; data=' + data.toString());
+								//NodeJS.Console.Info("-Finished SearchTweets for " + query + "; data=" + data.ToString());
 								tcs.setResult(trendsContainer);
 							});
 							$state = 1;

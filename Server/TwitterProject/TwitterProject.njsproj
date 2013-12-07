@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <SchemaVersion>2.0</SchemaVersion>
+        <ProjectGuid>{d481f3ad-cfcb-40bd-968e-dd8be4372896}</ProjectGuid>
+        <ProjectHome />
+        <ProjectView>ShowAllFiles</ProjectView>
+        <StartupFile>server.js</StartupFile>
+        <WorkingDirectory>.</WorkingDirectory>
+        <OutputPath>.</OutputPath>
+        <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+        <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+        <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+    <ItemGroup>
+        <Content Include="robots.txt" />
+        <Content Include="favicon.ico" />
+        <Content Include="package.json" />
+        <Content Include="settings.example.json" />
+        <Compile Include="server.js" />
+        <Compile Include="middleware\errorHandler.js" />
+        <Compile Include="middleware\locals.js" />
+        <Content Include="public\favicon.ico" />
+        <Compile Include="routes\account.js" />
+        <Compile Include="routes\data.js" />
+        <Compile Include="routes\global.js" />
+        <Compile Include="routes\home.js" />
+        <Content Include="views\about.jade" />
+        <Content Include="views\chat.jade" />
+        <Content Include="views\index.jade" />
+        <Content Include="views\layout.jade" />
+        <Content Include="views\layout_mobile.jade" />
+        <Content Include="public\images\accent.png" />
+        <Content Include="public\images\aspNetHome.png" />
+        <Content Include="public\images\bg.png" />
+        <Content Include="public\images\bullet.png" />
+        <Content Include="public\images\facebook.png" />
+        <Content Include="public\images\facebookLogin.png" />
+        <Content Include="public\images\findHosting.png" />
+        <Content Include="public\images\graph.png" />
+        <Content Include="public\images\header.png" />
+        <Content Include="public\images\heatmap.png" />
+        <Content Include="public\images\heroAccent.png" />
+        <Content Include="public\images\heroAccent2.png" />
+        <Content Include="public\images\npm.png" />
+        <Content Include="public\images\NuGetGallery.png" />
+        <Content Include="public\images\orderedListOne.png" />
+        <Content Include="public\images\orderedListThree.png" />
+        <Content Include="public\images\orderedListTwo.png" />
+        <Content Include="public\images\profile.png" />
+        <Content Include="public\images\twitter.png" />
+        <Content Include="public\images\windowsLive.png" />
+        <Content Include="public\images\img1.jpg" />
+        <Content Include="public\images\img2.jpg" />
+        <Content Include="public\images\img3.jpg" />
+        <Content Include="public\images\img4.jpg" />
+        <Content Include="public\images\img5.jpg" />
+        <Content Include="public\images\logo-dophin.gif" />
+        <Content Include="public\images\logo-fish.gif" />
+        <Content Include="public\images\logo-shell.gif" />
+        <Compile Include="public\javascripts\chat.js" />
+        <Compile Include="public\javascripts\jquery-1.7.min.js" />
+        <Compile Include="public\javascripts\tidal.js" />
+        <Compile Include="public\javascripts\ui.js" />
+        <Content Include="public\jquery-mobile\jquery.mobile-1.0rc3.css" />
+        <Content Include="public\jquery-mobile\jquery.mobile-1.0rc3.min.css" />
+        <Content Include="public\jquery-mobile\jquery.mobile-1.0rc3.structure.min.css" />
+        <Content Include="public\jquery-mobile\jquery.mobile.structure-1.0rc3.css" />
+        <Content Include="public\jquery-mobile\jquery.mobile.structure-1.0rc3.min.css" />
+        <Compile Include="public\jquery-mobile\jquery.mobile-1.0rc3.js" />
+        <Compile Include="public\jquery-mobile\jquery.mobile-1.0rc3.min.js" />
+        <Content Include="public\stylesheets\chat.css" />
+        <Content Include="public\stylesheets\style.css" />
+        <Content Include="public\stylesheets\style.min.css" />
+        <Content Include="public\stylesheets\chat.less" />
+        <Content Include="public\stylesheets\style.less" />
+        <Content Include="public\jquery-mobile\images\ajax-loader.png" />
+        <Content Include="public\jquery-mobile\images\icons-18-black.png" />
+        <Content Include="public\jquery-mobile\images\icons-18-white.png" />
+        <Content Include="public\jquery-mobile\images\icons-36-black.png" />
+        <Content Include="public\jquery-mobile\images\icons-36-white.png" />
+        <Content Include="views\account\account.jade" />
+        <Content Include="views\account\login.jade" />
+        <Content Include="views\account\register.jade" />
+        <Content Include="views\errors\404.jade" />
+        <Content Include="views\errors\500.jade" />
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="middleware" />
+        <Folder Include="public" />
+        <Folder Include="public\images" />
+        <Folder Include="public\javascripts" />
+        <Folder Include="public\jquery-mobile" />
+        <Folder Include="public\jquery-mobile\images" />
+        <Folder Include="public\stylesheets" />
+        <Folder Include="routes" />
+        <Folder Include="views" />
+        <Folder Include="views\account" />
+        <Folder Include="views\errors" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
+    <ProjectExtensions>
+        <VisualStudio>
+          <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+            <WebProjectProperties>
+              <UseIIS>False</UseIIS>
+              <AutoAssignPort>True</AutoAssignPort>
+              <DevelopmentServerPort>0</DevelopmentServerPort>
+              <DevelopmentServerVPath>/</DevelopmentServerVPath>
+              <IISUrl>http://localhost:48022/</IISUrl>
+              <NTLMAuthentication>False</NTLMAuthentication>
+              <UseCustomServer>True</UseCustomServer>
+              <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+              <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+            </WebProjectProperties>
+          </FlavorProperties>
+          <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+            <WebProjectProperties>
+              <StartPageUrl>
+              </StartPageUrl>
+              <StartAction>CurrentPage</StartAction>
+              <AspNetDebugging>True</AspNetDebugging>
+              <SilverlightDebugging>False</SilverlightDebugging>
+              <NativeDebugging>False</NativeDebugging>
+              <SQLDebugging>False</SQLDebugging>
+              <ExternalProgram>
+              </ExternalProgram>
+              <StartExternalURL>
+              </StartExternalURL>
+              <StartCmdLineArguments>
+              </StartCmdLineArguments>
+              <StartWorkingDirectory>
+              </StartWorkingDirectory>
+              <EnableENC>False</EnableENC>
+              <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+            </WebProjectProperties>
+          </FlavorProperties>
+        </VisualStudio>
+    </ProjectExtensions>
+</Project>

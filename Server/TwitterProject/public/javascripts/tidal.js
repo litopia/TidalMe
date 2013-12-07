@@ -2,7 +2,7 @@ var socket = null;
 
 $(function () {
     var m_DaysToLookBack = 1;
-    var m_CurrentWoeId = 1;
+    var m_CurrentWoeId = 23424977;  // US
 
     function GetDataTable(location, days){
         $.ajax({
@@ -75,6 +75,7 @@ $(function () {
         // Query from Server
         GetTweetListFromServer(data.name);
         GetImageListFromServer(data.name);
+        GetGraphDataFromServer(data.query);
     }
     
     function GetTweetListFromServer(query){
@@ -121,6 +122,71 @@ $(function () {
                     .enter()
                     .append("li").classed("clearfix", true);
                 li.append('img').attr('src', function(ev){ return ev.tweetImage; } );
+            }
+        });
+    }
+
+    function GetGraphDataFromServer(query) {
+        d3.select(".timeline-area svg").remove();
+
+        $.ajax({
+            url: "/data/tweets/getGraphData?query=" + encodeURIComponent(query) + "&woeid=" + m_CurrentWoeId + "&days=" + m_DaysToLookBack,
+            success: function (data, status) {
+                console.info("status: " + status);
+                console.info("graphData: " + JSON.stringify(data));
+
+                var svg = d3.select(".timeline-area").append("svg");
+
+                var margin = { top: 20, right: 20, bottom: 30, left: 10 },
+                    width = svg.node().getBoundingClientRect().width - margin.left - margin.right;
+                    height = svg.node().getBoundingClientRect().height - margin.top - margin.bottom;
+
+                var x = d3.scale.linear()
+                    .domain([0, 24])
+                    .range([0, width]);
+
+                var y = d3.scale.linear()
+                    .range([height, 0]);
+
+                var xAxis = d3.svg.axis()
+                    .scale(x)
+                    .orient("bottom");
+
+                var yAxis = d3.svg.axis()
+                    .scale(y)
+                    .orient("left");
+
+                var area = d3.svg.area()
+                    .x(function (d, i) { return x(i); })
+                    .y0(height)
+                    .y1(function (d) { return y(d); });
+
+                var line = d3.svg.line()
+                    .x(function (d, i) { return x(i); })
+                    .y(function (d) { return y(d); });
+
+                var chart = svg
+                    .append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                y.domain([0, d3.max(data, function (d) { return d; })]);
+
+                chart.append("path")
+                    .datum(data)
+                    .attr("class", "line")
+                    .attr("d", line);
+
+                chart.append("path")
+                    .datum(data)
+                    .attr("class", "area")
+                    .attr("d", area);
+
+                chart.append("g")
+                    .attr("class", "x axis")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(xAxis);
+
+
             }
         });
     }
